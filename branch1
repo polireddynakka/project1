@@ -5,7 +5,11 @@
 
 //making second change //
 
+<<<<<<< Updated upstream
  //this is the third change //
+=======
+//we r writing this for checking the stash cmd //
+>>>>>>> Stashed changes
 
 
 </subbranch>
