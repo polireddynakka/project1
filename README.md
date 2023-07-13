@@ -106,3 +106,43 @@ remove_variables(file_path, variables_to_remove)
 
 
 
+
+
+#########
+
+from tfparser import terraform
+
+def remove_variables(file_path, variables_to_remove):
+    with open(file_path, 'r') as f:
+        tf_content = f.read()
+
+    tf_data = terraform.parse(tf_content)
+
+    # Traverse the parsed Terraform data and remove specified variables
+    remove_variables_recursively(tf_data, variables_to_remove)
+
+    updated_tf_content = tf_data.dumps()
+
+    with open(file_path, 'w') as f:
+        f.write(updated_tf_content)
+
+def remove_variables_recursively(tf_data, variables_to_remove):
+    if isinstance(tf_data, terraform.Block):
+        if tf_data.type == "variable" and tf_data.name in variables_to_remove:
+            tf_data.parent.body.remove(tf_data)
+        else:
+            for child_block in tf_data.body:
+                remove_variables_recursively(child_block, variables_to_remove)
+    elif isinstance(tf_data, list):
+        for item in tf_data:
+            remove_variables_recursively(item, variables_to_remove)
+
+# Usage example
+file_path = 'path/to/terraform_file.tf'
+variables_to_remove = ['variable1', 'variable2']
+
+remove_variables(file_path, variables_to_remove)
+
+
+
+
