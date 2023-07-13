@@ -187,6 +187,38 @@ remove_variables(file_path, variables_to_remove)
 
 
 
+def add_variable(file_path, variable_name):
+    with open(file_path, 'r') as f:
+        tf_content = f.readlines()
+
+    # Check if the variable already exists
+    existing_variable = False
+    for line in tf_content:
+        if line.strip().startswith("variable") and variable_name in line:
+            existing_variable = True
+            break
+
+    # If the variable does not exist, add a new block
+    if not existing_variable:
+        tf_content.append("\nvariable \"{}\" {{\n".format(variable_name))
+        tf_content.append("  type = any\n")
+        tf_content.append("  default = []\n")
+        tf_content.append("}\n")
+
+        with open(file_path, 'w') as f:
+            f.writelines(tf_content)
+    else:
+        print("The variable already exists in the file. Skipping addition of the variable.")
+
+# Usage example
+file_path = 'path/to/terraform_file.tf'
+variable_name = 'example_variable'
+
+add_variable(file_path, variable_name)
+
+
+
+
 
 
 
