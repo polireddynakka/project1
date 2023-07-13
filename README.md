@@ -146,3 +146,25 @@ remove_variables(file_path, variables_to_remove)
 
 
 
+import re
+
+def remove_variables(file_path, variables_to_remove):
+    with open(file_path, 'r') as f:
+        tf_content = f.read()
+
+    for variable in variables_to_remove:
+        regex = r"variable\s+\"{}\"".format(re.escape(variable))
+        tf_content = re.sub(regex, "", tf_content)
+
+    with open(file_path, 'w') as f:
+        f.write(tf_content)
+
+# Usage example
+file_path = 'path/to/terraform_file.tf'
+variables_to_remove = ['variable1', 'variable2']
+
+remove_variables(file_path, variables_to_remove)
+
+
+
+
