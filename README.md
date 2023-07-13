@@ -287,3 +287,36 @@ process_file(filename, words_to_delete, words_to_replace, replacement_lines)
 
 
 
+
+import hcl
+import json
+
+def modify_module_variables(module_file, variables_to_add, variables_to_delete):
+    # Load the module file as HCL
+    with open(module_file, 'r') as f:
+        hcl_data = hcl.load(f)
+
+    # Find existing variables in the module
+    existing_variables = hcl_data['module']['my_s3_bucket']['variable']
+
+    # Add new variables to the module
+    for variable, value in variables_to_add.items():
+        existing_variables[variable] = {'default': value}
+
+    # Delete variables from the module
+    for variable in variables_to_delete:
+        existing_variables.pop(variable, None)
+
+    # Serialize the modified HCL back to the module file
+    with open(module_file, 'w') as f:
+        json.dump(hcl_data, f, indent=2)
+
+# Example usage
+module_file = 'main.tf'
+variables_to_add = {'new_variable': 'new_value'}
+variables_to_delete = ['environment']
+
+modify_module_variables(module_file, variables_to_add, variables_to_delete)
+
+
+
