@@ -319,4 +319,32 @@ variables_to_delete = ['environment']
 modify_module_variables(module_file, variables_to_add, variables_to_delete)
 
 
+def add_variable_block(file_path, condition_variable, new_variable_name):
+    with open(file_path, 'r') as f:
+        tf_content = f.readlines()
+
+    # Check if the condition_variable is present in the file
+    if condition_variable in tf_content:
+        # Check if the new_variable_name already exists
+        if "variable \"{0}\"".format(new_variable_name) not in tf_content:
+            new_variable_block = "\nvariable \"{0}\" {{\n  type = any\n  default = [{1}]\n}}\n".format(new_variable_name, "block = [{")
+            tf_content.append(new_variable_block)
+
+            with open(file_path, 'w') as f:
+                f.writelines(tf_content)
+            print("Variable block added successfully.")
+        else:
+            print("Variable block already exists.")
+    else:
+        print("Condition variable not found.")
+
+# Usage example
+file_path = 'path/to/terraform_file.tf'
+condition_variable = "existing_variable"
+new_variable_name = "new_variable"
+
+add_variable_block(file_path, condition_variable, new_variable_name)
+
+
+
 
