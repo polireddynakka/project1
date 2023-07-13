@@ -218,6 +218,34 @@ add_variable(file_path, variable_name)
 
 
 
+def remove_consecutive_empty_lines(filename, n):
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+
+    output_lines = []
+    consecutive_empty_lines = 0
+
+    for line in lines:
+        if line.strip() == '':
+            consecutive_empty_lines += 1
+        else:
+            if consecutive_empty_lines <= n:
+                output_lines.extend(['\n'] * consecutive_empty_lines)
+            consecutive_empty_lines = 0
+            output_lines.append(line)
+
+    if consecutive_empty_lines <= n:
+        output_lines.extend(['\n'] * consecutive_empty_lines)
+
+    with open(filename, 'w') as file:
+        file.writelines(output_lines)
+
+# Usage example
+filename = 'example.txt'
+n = 3
+remove_consecutive_empty_lines(filename, n)
+
+
 
 
 
