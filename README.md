@@ -247,6 +247,43 @@ remove_consecutive_empty_lines(filename, n)
 
 
 
+def process_file(filename, words_to_delete, words_to_replace, replacement_lines):
+    with open(filename, 'r') as file:
+        lines = file.readlines()
+
+    output_lines = []
+
+    for line in lines:
+        should_delete = False
+        for word in words_to_delete:
+            if word in line:
+                should_delete = True
+                break
+
+        if should_delete:
+            continue
+
+        should_replace = False
+        for word in words_to_replace:
+            if word in line:
+                should_replace = True
+                break
+
+        if should_replace:
+            output_lines.extend(replacement_lines)
+        else:
+            output_lines.append(line)
+
+    with open(filename, 'w') as file:
+        file.writelines(output_lines)
+
+# Usage example
+filename = 'example.txt'
+words_to_delete = ['word1', 'word2', 'word3']
+words_to_replace = ['word4', 'word5']
+replacement_lines = ['Replacement line 1\n', 'Replacement line 2\n']
+
+process_file(filename, words_to_delete, words_to_replace, replacement_lines)
 
 
 
