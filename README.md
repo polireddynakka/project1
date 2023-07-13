@@ -347,4 +347,47 @@ add_variable_block(file_path, condition_variable, new_variable_name)
 
 
 
+def add_tree_block(file_path, condition_key, condition_value, new_block_content):
+    with open(file_path, 'r') as f:
+        tf_content = f.readlines()
+
+    # Check if the condition_key and condition_value are present in the file
+    if condition_key in tf_content and condition_value in tf_content:
+        new_line_index = 0
+
+        # Find the index where the new block should be inserted
+        for i, line in enumerate(tf_content):
+            if line.strip() == condition_key and tf_content[i+1].strip() == condition_value:
+                new_line_index = i + 2  # Insert new block after condition key-value
+
+        # Insert the new block at the calculated index
+        tf_content.insert(new_line_index, new_block_content)
+
+        with open(file_path, 'w') as f:
+            f.writelines(tf_content)
+        print("New block added successfully.")
+    else:
+        print("Condition key-value not found.")
+
+# Usage example
+file_path = 'path/to/terraform_file.tf'
+condition_key = "create"
+condition_value = "true"
+new_block_content = '''
+tree = [{
+    name = "poli"
+    dob = "feb"
+    state = "VA"
+    poli = {
+            haa = 1
+            hello = 2
+     }
+}]
+'''
+
+add_tree_block(file_path, condition_key, condition_value, new_block_content)
+
+
+
+
 
