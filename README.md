@@ -173,7 +173,7 @@ def remove_variables(file_path, variables_to_remove):
         tf_content = f.read()
 
     for variable in variables_to_remove:
-        regex = r"variable\s+\"{}\"\s*{[^}]*}}".format(re.escape(variable))
+        regex = r"variable\s+\"{}\"\s*{{[^}}]*}}".format(re.escape(variable))
         tf_content = re.sub(regex, "", tf_content, flags=re.DOTALL)
 
     with open(file_path, 'w') as f:
@@ -184,6 +184,7 @@ file_path = 'path/to/terraform_file.tf'
 variables_to_remove = ['variable1', 'variable2']
 
 remove_variables(file_path, variables_to_remove)
+
 
 
 
