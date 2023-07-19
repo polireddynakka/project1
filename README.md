@@ -396,7 +396,7 @@ Confluent Documentation:
 [Confluent Kafka Clients for Various Programming Languages](https://docs.confluent.io/platform/current/clients/index.html)
 
 
-
+bootstrap: SSL handshake failed: Disconnected: connecting to a PLAINTEXT broker listener? (after 27ms in state SSL_HANDSHAKE, 14 identical error(s) suppressed)
 
 
 
