@@ -390,4 +390,14 @@ add_tree_block(file_path, condition_key, condition_value, new_block_content)
 
 
 
+Confluent Documentation:
+
+[Confluent Kafka Documentation](https://docs.confluent.io/home/overview.html)
+[Confluent Kafka Clients for Various Programming Languages](https://docs.confluent.io/platform/current/clients/index.html)
+
+
+
+
+
+
 
