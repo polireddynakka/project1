@@ -399,5 +399,40 @@ Confluent Documentation:
 bootstrap: SSL handshake failed: Disconnected: connecting to a PLAINTEXT broker listener? (after 27ms in state SSL_HANDSHAKE, 14 identical error(s) suppressed)
 
 
+<project>
+    <!-- ... -->
+    <build>
+        <plugins>
+            <!-- ... other plugins ... -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>add-resource</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>add-resource</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <!-- Path to the folder outside the src folder -->
+                                    <directory>/path/to/your/folder</directory>
+                                    <!-- Include all files in the folder -->
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <!-- ... -->
+</project>
 
 
