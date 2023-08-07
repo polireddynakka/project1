@@ -24,23 +24,129 @@ Total cost: $4
 }
 
 
-$ t - t       
-1         t 2 :                                                         8   :   :                   8   : :                   8   : :                   9   : :                   :                   2 :   :       
-7         e 4                                                           .     C                     .                         .                         .                                             .   C         
-.           7 $                                                         1   $ o $                   1   $ $                   1   $ $                   1   $ $                   $                   0 $ o $       
-4         - 8 1                                                         5   3 s 0                   5   5 0                   8   6 0                   8   3 0                   1                   4 1 s 0       
-2           . 3                                                             3 t .                       0 .                       7 .                       3 .                   0                     1 t .       
-C 6 3                                                             . : 0                       . 1                       . 5                       . 1                   0                     7 : 4       
-o 7 .                                                             4   5                       2 8                       9 3                       4 3                   .                     .   6       
-s   0                                                             8 $                         4                         2                         8                     4                     1 $         
-t   6                                                               0                                                                                                   4                     8 0         
-:                                                                   .                                                                                                                           .         
-0                                                                                                                           0         
-$                                                                   0                                                                                                                           0         
-5                                                                                                                                                                                                         
-9                                                                                                                                                                                                         
-0                                                                                                                                                                                                         
-4                                                                                                                                                                                                         
-.                                                                                                                                                                                                         
-1                                                                                                                                                                                                         
-8     
+R 
+M 
+o n t 
+h :   
+J u l 
+y   
+C o s 
+t _ U 
+s a g 
+e _ b 
+y _ S 
+e r v 
+i c e 
+: 
+T 
+o t a 
+l   c 
+o s t 
+:   $ 
+0 . 0 
+0   
+A c c 
+o u n 
+t :   
+9 9 3 
+5 1 4 
+0 6 3 
+5 4 4 
+a p 
+m _ i 
+d :   
+A P M 
+1 0 0 
+6 7 0 
+6 
+a 
+p p l 
+i c a 
+t i o 
+n _ n 
+a m e 
+:   C 
+a r e 
+s p r 
+e - S 
+l v r 
+M o 
+n t h 
+:   J 
+u l y 
+C 
+o s t 
+_ U s 
+a g e 
+_ b y 
+_ S e 
+r v i 
+c e : 
+.   A 
+W S   
+K e y 
+M a 
+n a g 
+e m e 
+n t   
+S e r 
+v i c 
+e   - 
+C o 
+s t : 
+$ 8 
+. 1 5 
+.   A 
+W S   
+L a m 
+b d a 
+-   
+C o s 
+t :   
+$ 0 . 
+0 3 
+. 
+A m 
+a z o 
+n   E 
+l a s 
+t i c 
+L o 
+a d   
+B a l 
+a n c 
+i n g 
+-   
+C o s 
+t :   
+$ 3 3 
+. 4 8 
+.   A 
+m a z 
+o n   
+S i m 
+p l e 
+N o 
+t i f 
+i c a 
+t i o 
+n   S 
+e r v 
+i c e 
+-   
+C o s 
+t :   
+$ 0 . 
+0 0 
+. 
+A m 
+a z o 
+n   S 
+i m p 
+l e   
+S t o 
+r a g 
+e   S 
+e r v 
+i c e 
+-   
