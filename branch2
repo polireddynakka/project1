@@ -1,3 +1,211 @@
- this is pavani
+import boto3
+import datetime
+from dateutil import parser
 
-how r u doing 
+def assume_role(role_arn, session_name, region):
+    sts_client = boto3.client('sts', region_name=region)
+    response = sts_client.assume_role(
+        RoleArn=role_arn,
+        RoleSessionName=session_name
+    )
+    return boto3.Session(
+        aws_access_key_id=response['Credentials']['AccessKeyId'],
+        aws_secret_access_key=response['Credentials']['SecretAccessKey'],
+        aws_session_token=response['Credentials']['SessionToken'],
+        region_name=region
+    )
+
+def retrieve_cost_usage_data():
+    master_account_role_arn = 'arn:aws:iam::12345:role/COST_EXPLORER'  
+    session_name = 'CostUsageSession'
+    responses = []
+    
+    tags_by_account = {
+            'Provider-Finder-Slvr': {
+                'account_id': '12345',
+                'region': 'us-east-2',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc-np01"]}}]
+            },
+            'Provider-Finder-Gold': {
+                'account_id': '143',
+                'region': 'us-east-1',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc-np02"]}}]
+            },
+            'Provider-Finder-Plat': {
+                'account_id': '1434',
+                'region': 'us-east-1',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc-prod"]}}]
+            },
+            'Provider-Finder-DR': {
+                'account_id': '1434',
+                'region': 'us-east-2',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc-dr"]}}]
+            },
+            
+            'Carespre-Slvr': {
+                'account_id': '12345',
+                'region': 'us-east-2',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc1"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc1-np01"]}}]
+            },
+            'Carespre-Gold': {
+                'account_id': '143',
+                'region': 'us-east-1',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc1"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc1-np02"]}}]
+            },
+            'Carespre-Plat': {
+                'account_id': '1434',
+                'region': 'us-east-1',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc1"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc1-prod"]}}]
+            },
+            'Carespre-DR': {
+                'account_id': '1434',
+                'region': 'us-east-2',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc1"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc1-dr"]}}]
+            },
+            'DBG-Slvr': {
+                'account_id': '14345',
+                'region': 'us-east-2',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc2"]}},{"Tags": {"Key": "costcenter","Values": ["123"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc2-np01"]}}]
+            },
+            'DBG-Gold': {
+                'account_id': '143456',
+                'region': 'us-east-1',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc2"]}},{"Tags": {"Key": "costcenter","Values": ["123"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc2-np02"]}}]
+            },
+            'GBD-Slvr': {
+                'account_id': '1434567',
+                'region': 'us-east-2',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["APM1009492"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["apsrtc3-np01"]}}]
+            }
+            # 'GBD-Gold': {
+            #     'account_id': '14345678',
+            #     'region': 'us-east-1',
+            #     'filters': [{"Tags": {"Key": "apm-id","Values": ["APM1007720"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["apsrtc4-np02"]}}]
+            # }
+            # 'GBD-Plat': {
+            #     'account_id': '143456789',
+            #     'region': 'us-east-1',
+            #     'filters': [{"Tags": {"Key": "apm-id","Values": ["apm1007720"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["apsrtc4-prod"]}}]
+            # },
+            # 'GBD-DR': {
+            #     'account_id': '143456789',
+            #     'region': 'us-east-1',
+            #     'filters': [{"Tags": {"Key": "apm-id","Values": ["apm1007720"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["apsrtc4-dr"]}}]
+            # }
+        }
+    for App, account_data in tags_by_account.items():
+            region = account_data['region']
+            # App = {app}
+            account_id = account_data['account_id']
+            member_account_role_arn = f'arn:aws:iam::{account_id}:role/COST_EXPLORER'  # Replace with the ARN of the IAM role in the member account
+            # Assume the IAM role in the member account
+            member_account_session = assume_role(member_account_role_arn, session_name, region)
+            apm_id = None
+            filters = account_data['filters']
+            # print(filters)    
+            for filter in filters:
+                if filter['Tags']['Key'] == 'apm-id':
+                    apm_id = filter['Tags']['Values'][0]
+                    break
+            
+            if account_id != '12345' :
+                ce_client = member_account_session.client('ce')
+                # Define the filter based on the account type (master or member)
+                filter = {
+                      "And": filters
+                }
+            else:
+                # Initialize the AWS clients
+                ce_client = boto3.client('ce')
+                # Define the filter based on the account type (master or member)
+                filter = {
+                      "And": filters
+                }
+            # Get the start and end dates for the report
+            today = datetime.date.today()
+            start_date = datetime.date(today.year, today.month - 1, 1)
+            end_date = datetime.date(today.year, today.month, 1)
+            
+            # Set the time period to May 2023
+                
+            time_period={
+                    'Start': start_date.strftime('%Y-%m-%d'),
+                    'End': end_date.strftime('%Y-%m-%d')
+            }
+        
+            # Set the granularity to MONTHLY and retrieve the UnblendedCost metric
+            granularity = 'MONTHLY'
+            metrics = ['UnblendedCost']
+            
+            # Group the results by SERVICE
+            group_by = [{'Type': 'DIMENSION', 'Key': 'SERVICE'}]
+            
+            # Get the cost and usage data
+            response = ce_client.get_cost_and_usage(
+                TimePeriod=time_period,
+                Granularity=granularity,
+                Metrics=metrics,
+                GroupBy=group_by,
+                Filter=filter
+            )       
+            # Print the cost and usage data
+            total_cost = 0
+            body = f"Account: {account_id}\napm_id: {apm_id}\n"
+            for result_by_time in response['ResultsByTime']:
+                
+                # Convert start_date and end_date to month name format
+                month = parser.parse(result_by_time['TimePeriod']['Start']).strftime('%B')
+                # application_name = App
+                
+                print('TimePeriod:', result_by_time['TimePeriod']['Start'], '-', result_by_time['TimePeriod']['End'])
+                body += f"application_name: {App}\nMonth: {month} \nCost Usage by Service:\n"
+                for group in result_by_time['Groups']:
+                    service_name = group['Keys'][0]
+                    service_cost = float(group['Metrics']['UnblendedCost']['Amount'])
+                    # Format the cost value with 2 decimal places
+                    service_cost = "{:.2f}".format(service_cost)
+                    total_cost += float(service_cost)
+                     
+                    print('Service:', service_name, 'Cost:', '$'+ str(service_cost))
+                    body += f"  . {service_name} - Cost: ${service_cost}\n"
+                # Print the total cost
+                # Format the cost value with 2 decimal places
+                total_cost = "{:.2f}".format(total_cost)
+                print('Total cost:', '$'+ str(total_cost))
+            
+                # Format the cost usage report for email
+                body += f"Total cost: ${total_cost} \n\n"
+            response = body
+            responses.append(body)
+            joined_response = '\n\n'.join(responses)
+    return str(joined_response)
+    
+
+def send_sns_notification(cost_data):
+    sns_client = boto3.client('sns')
+    
+    if cost_data is None:
+        cost_data = 'No cost data available'
+    # Create the message for SNS notification
+    message = cost_data
+    
+    # Replace 'TOPIC_ARN' with the ARN of the SNS topic in the master account
+    sns_client.publish(
+        TopicArn='arn:aws:sns:us-east-2:12345:cost_update',
+        Message=message
+    )
+
+def lambda_handler(event, context):
+    
+    # retrieve cost usage data    
+    cost_data = retrieve_cost_usage_data()
+    
+    #Send SNS Notification
+    send_sns_notification(cost_data)
+
+    # response
+    return {
+            'statusCode': 200,
+            'body': 'Success'
+        }
+
