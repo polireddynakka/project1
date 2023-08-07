@@ -21,73 +21,73 @@ def retrieve_cost_usage_data():
     responses = []
     
     tags_by_account = {
-            'Provider-Finder-Slvr': {
+            'test1-Slvr': {
                 'account_id': '12345',
                 'region': 'us-east-2',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc-np01"]}}]
             },
-            'Provider-Finder-Gold': {
+            'test1-Gold': {
                 'account_id': '143',
                 'region': 'us-east-1',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc-np02"]}}]
             },
-            'Provider-Finder-Plat': {
+            test1-prod': {
                 'account_id': '1434',
                 'region': 'us-east-1',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc-prod"]}}]
             },
-            'Provider-Finder-DR': {
+            'test1-nonprod': {
                 'account_id': '1434',
                 'region': 'us-east-2',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc-dr"]}}]
             },
             
-            'Carespre-Slvr': {
+            'test2': {
                 'account_id': '12345',
                 'region': 'us-east-2',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc1"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc1-np01"]}}]
             },
-            'Carespre-Gold': {
+            'test2-pp': {
                 'account_id': '143',
                 'region': 'us-east-1',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc1"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc1-np02"]}}]
             },
-            'Carespre-Plat': {
+            'test2-ppp': {
                 'account_id': '1434',
                 'region': 'us-east-1',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc1"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc1-prod"]}}]
             },
-            'Carespre-DR': {
+            'test2-pppp': {
                 'account_id': '1434',
                 'region': 'us-east-2',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc1"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc1-dr"]}}]
             },
-            'DBG-Slvr': {
+            'test3-q': {
                 'account_id': '14345',
                 'region': 'us-east-2',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc2"]}},{"Tags": {"Key": "costcenter","Values": ["123"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc2-np01"]}}]
             },
-            'DBG-Gold': {
+            'test3-qq': {
                 'account_id': '143456',
                 'region': 'us-east-1',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc2"]}},{"Tags": {"Key": "costcenter","Values": ["123"]}}, {"Tags": {"Key": "workspace","Values": ["awsapsrtc2-np02"]}}]
             },
-            'GBD-Slvr': {
+            'test3-qqq': {
                 'account_id': '1434567',
                 'region': 'us-east-2',
                 'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc3"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["apsrtc3-np01"]}}]
             }
-            # 'GBD-Gold': {
+            # 'test4-r': {
             #     'account_id': '14345678',
             #     'region': 'us-east-1',
             #     'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc4"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["apsrtc4-np02"]}}]
             # }
-            # 'GBD-Plat': {
+            # 'test4-rr': {
             #     'account_id': '143456789',
             #     'region': 'us-east-1',
             #     'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc5"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["apsrtc4-prod"]}}]
             # },
-            # 'GBD-DR': {
+            # 'test4-rrr': {
             #     'account_id': '143456789',
             #     'region': 'us-east-1',
             #     'filters': [{"Tags": {"Key": "apm-id","Values": ["apsrtc5"]}},{"Tags": {"Key": "costcenter","Values": ["108"]}}, {"Tags": {"Key": "workspace","Values": ["apsrtc4-dr"]}}]
