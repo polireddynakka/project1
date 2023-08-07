@@ -13,3 +13,12 @@ Service: Amazon Elastic Load Balancing Cost: $1
 Service: Amazon Simple Notification Service Cost: $0.00
 Service: Amazon Simple Storage Service Cost: $0.46
 Total cost: $4
+
+
+ "errorMessage": "Syntax error in module 'lambda_function': invalid syntax (lambda_function.py, line 199)",
+  "errorType": "Runtime.UserCodeSyntaxError",
+  "requestId": "dc3d433b-0da7-451f-a24e-2a66119ba0c6",
+  "stackTrace": [
+    "  File \"/var/task/lambda_function.py\" Line 199\n            print(line.1just(max_length), end=' ')\n"
+  ]
+}
