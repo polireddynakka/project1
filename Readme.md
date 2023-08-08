@@ -24,129 +24,42 @@ Total cost: $4
 }
 
 
-R 
-M 
-o n t 
-h :   
-J u l 
-y   
-C o s 
-t _ U 
-s a g 
-e _ b 
-y _ S 
-e r v 
-i c e 
-: 
-T 
-o t a 
-l   c 
-o s t 
-:   $ 
-0 . 0 
-0   
-A c c 
-o u n 
-t :   
-9 9 3 
-5 1 4 
-0 6 3 
-5 4 4 
-a p 
-m _ i 
-d :   
-A P M 
-1 0 0 
-6 7 0 
-6 
-a 
-p p l 
-i c a 
-t i o 
-n _ n 
-a m e 
-:   C 
-a r e 
-s p r 
-e - S 
-l v r 
-M o 
-n t h 
-:   J 
-u l y 
-C 
-o s t 
-_ U s 
-a g e 
-_ b y 
-_ S e 
-r v i 
-c e : 
-.   A 
-W S   
-K e y 
-M a 
-n a g 
-e m e 
-n t   
-S e r 
-v i c 
-e   - 
-C o 
-s t : 
-$ 8 
-. 1 5 
-.   A 
-W S   
-L a m 
-b d a 
--   
-C o s 
-t :   
-$ 0 . 
-0 3 
-. 
-A m 
-a z o 
-n   E 
-l a s 
-t i c 
-L o 
-a d   
-B a l 
-a n c 
-i n g 
--   
-C o s 
-t :   
-$ 3 3 
-. 4 8 
-.   A 
-m a z 
-o n   
-S i m 
-p l e 
-N o 
-t i f 
-i c a 
-t i o 
-n   S 
-e r v 
-i c e 
--   
-C o s 
-t :   
-$ 0 . 
-0 0 
-. 
-A m 
-a z o 
-n   S 
-i m p 
-l e   
-S t o 
-r a g 
-e   S 
-e r v 
-i c e 
--   
+responses = [
+    "TimePeriod: 2023-07-01 - 2023-08-01",
+    "Service: AWS Key Management Service Cost: $1.1",
+    "Service: AWS Lambda Cost: $0.11",
+    "Service: Amazon Elastic Load Balancing Cost: $0.11",
+    "Service: Amazon Simple Storage Service Cost: $0.11",
+    "Total cost: $5",
+    "TimePeriod: 2023-07-01 - 2023-08-01",
+    "Service: Amazon Elastic Load Balancing Cost: $1",
+    "Total cost: $1",
+    "TimePeriod: 2023-07-01 - 2023-08-01",
+    "Service: AWS Key Management Service Cost: $2",
+    "Service: Amazon Elastic Load Balancing Cost: $1",
+    "Service: Amazon Simple Notification Service Cost: $0.00",
+    "Service: Amazon Simple Storage Service Cost: $0.46",
+    "Total cost: $4"
+]
+
+# Separate blocks starting from TimePeriod
+blocks = []
+block = []
+for response in responses:
+    if response.startswith("TimePeriod"):
+        if block:
+            blocks.append(block)
+        block = [response]
+    else:
+        block.append(response)
+blocks.append(block)
+
+# Calculate the maximum length of each line in all blocks
+max_length = max(len(line) for block in blocks for line in block)
+
+# Print the blocks side by side
+for i in range(0, len(blocks[0])):
+    for block in blocks:
+        line = block[i] if i < len(block) else ''
+        print(line.ljust(max_length), end='   ')
+    print()
