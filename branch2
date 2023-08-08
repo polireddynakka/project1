@@ -220,3 +220,52 @@ Account: 456 apm_id: well Application: pp ENV: yugy Month: July    . AWS Glue - 
 
 
 body += f"'Month: {month}', \n 'application_name: {App}', \n 'Account: {account_id}', \n 'apm_id: {apm_id}', \n 'Cost_usage_by_service: ', \n 
+
+
+
+
+data = retrieve_cost_usage_data()
+    cost.append(data)
+    
+    # print each block in this response in horizontal format
+    data = cost[0].split("\n")
+    # print(data)
+    
+    responses = []
+    current_response = []
+    
+    #Process data
+    for item in data:
+        parts = item.split(': ')
+        if len(parts) == 2:
+            key, value = item.split(': ', 1)
+            current_response.append(f"{key}: {value}")
+            if key == 'Total cost':
+                responses.append(current_response)
+                current_response = []
+    # Print formatted response
+    # print(responses)
+    
+    
+    # split responses into blocks based on 'Account lines'
+    response_blocks = []
+    current_block = []
+    for lines in responses:
+        if lines[0].startswith('Account:'):
+            if current_block:
+                response_blocks.append(current_block)
+            current_block = lines
+        else:
+            current_block.extend(lines)
+    if current_block:
+        response_blocks.append(current_block)
+    
+    # Print each block in horizontal format
+    max_lines = max(len(block) for block in response_blocks)
+    for i in range(max_lines):
+        for block in response_blocks:
+            if i < len(block):
+                    print(block[i].replace('\t', '').ljust(60), end='')
+            # else:
+            #     print(block[i].replace('\t', '').ljust(40), end='')
+        print() 
