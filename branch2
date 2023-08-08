@@ -209,3 +209,12 @@ def lambda_handler(event, context):
             'body': 'Success'
         }
 
+
+
+
+
+
+
+
+
+body += f"'Month: {month}', \n 'application_name: {App}', \n 'Account: {account_id}', \n 'apm_id: {apm_id}', \n 'Cost_usage_by_service: ', \n 
