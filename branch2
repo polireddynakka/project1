@@ -300,3 +300,36 @@ if row is not None and col is not None:
     print(f"String '{targetString}' found at row {row+1}, column {col+1}.")
 else:
     print(f"String '{targetString}' not found in the grid.")
+
+
+
+
+
+
+
+
+
+
+
+
+def find_row_position(text, target_content):
+    lines = text.split('\n')
+    for row_idx, line in enumerate(lines):
+        if target_content in line:
+            return row_idx + 1  # Adding 1 to convert to 1-based indexing
+    return -1  # Return -1 if target content is not found
+
+# Example text
+text = """hi poli
+how are  you
+       hello
+                sir"""
+
+target_content = "hello"
+row_position = find_row_position(text, target_content)
+
+if row_position != -1:
+    print(f"The content '{target_content}' is found in row {row_position}.")
+else:
+    print(f"The content '{target_content}' is not found in the text.")
+
