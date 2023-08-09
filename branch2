@@ -275,3 +275,28 @@ data = retrieve_cost_usage_data()
 
 
 responses = [['Account: 123', 'apm_id: mcd', 'application_name: mcdonalds', 'Month: July ', 'Total cost: $0.00'], ['Account: 456', 'apm_id: mcd', 'application_name: pizza', 'Month: July ', '  . AWS Glue - Cost: $471.65', '  . AWS Key Management Service - Cost: $17.42', '  . AWS Lambda - Cost: $0.00', '  . AWS Secrets Manager - Cost: $0.00', '  . Amazon Athena - Cost: $0.01', '  . EC2 - Other - Cost: $136.45', '  . Amazon Elastic Compute Cloud - Compute - Cost: $5904.18', '  . Amazon OpenSearch Service - Cost: $22478.67', '  . Amazon Simple Storage Service - Cost: $133.06', '  . AmazonCloudWatch - Cost: $15.48', 'Total cost: $29156.92'], ['Account: 456', 'apm_id: mcd', 'application_name: bww', 'Month: July ', 'Total cost: $0.00'], ['Account: 789', 'apm_id: mcd', 'application_name: zomby', 'Month: July ', 'Total cost: $0.00'], ['Account: 673', 'apm_id: burger', 'application_name: burger-king', 'Month: July ', '  . Amazon Elastic Load Balancing - Cost: $100.44', 'Total cost: $100.44'], ['Account: 432', 'apm_id: burger', 'application_name: burger-queen', 'Month: July ', '  . AWS Key Management Service - Cost: $2.04', '  . Amazon Elastic Load Balancing - Cost: $117.18', '  . Amazon Simple Notification Service - Cost: $0.00', '  . Amazon Simple Storage Service - Cost: $0.46', 'Total cost: $119.68']]
+
+
+
+
+def find_row_col(grid, targetString):
+    for row_idx, row in enumerate(grid):
+        for col_idx, value in enumerate(row):
+            if value == targetString:
+                return row_idx, col_idx
+    return None, None  # If targetString is not found in the grid
+
+# Example usage:
+grid = [
+    ["apple", "banana", "cherry"],
+    ["grape", "apple", "orange"],
+    ["pear", "kiwi", "apple"]
+]
+
+targetString = "kiwi"
+row, col = find_row_col(grid, targetString)
+
+if row is not None and col is not None:
+    print(f"String '{targetString}' found at row {row+1}, column {col+1}.")
+else:
+    print(f"String '{targetString}' not found in the grid.")
