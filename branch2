@@ -333,3 +333,43 @@ if row_position != -1:
 else:
     print(f"The content '{target_content}' is not found in the text.")
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+input_data = [
+    ['account: 123', 'apm_id: apm12345', 'app: ppp-lll-www', 'month:june', 'total: $0.12'],
+    ['account: 456', 'apm_id: apm456789', 'app: aaa-bbb-ccc', 'month:june', 'AWS Glue - Cost: $2.01', 'AWS key management service - cost:$17', 'AWS lambda - cost:$23', 'total:$42.01']
+]
+
+# Find the maximum number of elements in any sublist
+max_elements = max(len(sublist) for sublist in input_data)
+
+# Add missing elements to sublists
+for sublist in input_data:
+    while len(sublist) < max_elements:
+        sublist.append('')
+
+# Transpose the data
+transposed_data = zip(*input_data)
+
+# Calculate the width of each column for formatting
+column_width = max(max(len(item) for item in sublist) for sublist in input_data) + 2
+
+# Print the required output with proper formatting
+for items in transposed_data:
+    formatted_items = [f"{item: <{column_width}}" for item in items]
+    print('  '.join(formatted_items))
+
+
