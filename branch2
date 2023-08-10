@@ -401,3 +401,22 @@ for i in range(0, len(input_data[0])):
         formatted_items = [f"{item: <{column_width}}" for item in items]
         print('  '.join(formatted_items))
     print("\n" * 2)  # Add extra space between blocks
+
+
+
+
+
+# Determine the width of each column for formatting
+column_width = max(len(item) for sublist in input_data for item in sublist) + 2
+
+# Print the required output with proper formatting
+for i in range(0, len(input_data[0])):
+    for sublist in input_data:
+        if i < len(sublist):
+            print(f"{sublist[i]: <{column_width}}", end='')
+        else:
+            print(' ' * column_width, end='')
+    if "Total cost" in input_data[0][i]:
+        print("\n\n")  # Add two new empty lines after "Total cost" line
+    else:
+        print()
