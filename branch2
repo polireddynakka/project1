@@ -373,3 +373,31 @@ for items in transposed_data:
     print('  '.join(formatted_items))
 
 
+
+
+
+
+# Find the maximum number of elements in any sublist
+max_elements = max(len(sublist) for sublist in input_data)
+
+# Add missing elements to sublists
+for sublist in input_data:
+    while len(sublist) < max_elements:
+        sublist.append('')
+
+# Transpose the data
+transposed_data = zip(*input_data)
+
+# Calculate the width of each column for formatting
+column_width = max(max(len(item) for item in sublist) for sublist in input_data) + 2
+
+# Determine the number of blocks
+num_blocks = len(input_data[0])
+
+# Print the required output with proper formatting
+for i in range(0, len(input_data[0])):
+    block_items = [items[i:i+num_blocks] for items in transposed_data]
+    for items in block_items:
+        formatted_items = [f"{item: <{column_width}}" for item in items]
+        print('  '.join(formatted_items))
+    print("\n" * 2)  # Add extra space between blocks
