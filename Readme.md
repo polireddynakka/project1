@@ -1,190 +1,36 @@
-TimePeriod: 2023-07-01 - 2023-08-01
-Service: AWS Key Management Service Cost: $1.1
-Service: AWS Lambda Cost: $0.11
-Service: Amazon Elastic Load Balancing Cost: $0.11
-Service: Amazon Simple Storage Service Cost: $0.11
-Total cost: $5
-TimePeriod: 2023-07-01 - 2023-08-01
-Service: Amazon Elastic Load Balancing Cost: $1
-Total cost: $1
-TimePeriod: 2023-07-01 - 2023-08-01
-Service: AWS Key Management Service Cost: $2
-Service: Amazon Elastic Load Balancing Cost: $1
-Service: Amazon Simple Notification Service Cost: $0.00
-Service: Amazon Simple Storage Service Cost: $0.46
-Total cost: $4
+import json
+import boto3
 
-
- "errorMessage": "Syntax error in module 'lambda_function': invalid syntax (lambda_function.py, line 199)",
-  "errorType": "Runtime.UserCodeSyntaxError",
-  "requestId": "dc3d433b-0da7-451f-a24e-2a66119ba0c6",
-  "stackTrace": [
-    "  File \"/var/task/lambda_function.py\" Line 199\n            print(line.1just(max_length), end=' ')\n"
-  ]
-}
-
-
-responses = [
-    "TimePeriod: 2023-07-01 - 2023-08-01",
-    "Service: AWS Key Management Service Cost: $1.1",
-    "Service: AWS Lambda Cost: $0.11",
-    "Service: Amazon Elastic Load Balancing Cost: $0.11",
-    "Service: Amazon Simple Storage Service Cost: $0.11",
-    "Total cost: $5",
-    "TimePeriod: 2023-07-01 - 2023-08-01",
-    "Service: Amazon Elastic Load Balancing Cost: $1",
-    "Total cost: $1",
-    "TimePeriod: 2023-07-01 - 2023-08-01",
-    "Service: AWS Key Management Service Cost: $2",
-    "Service: Amazon Elastic Load Balancing Cost: $1",
-    "Service: Amazon Simple Notification Service Cost: $0.00",
-    "Service: Amazon Simple Storage Service Cost: $0.46",
-    "Total cost: $4"
+input_data = [
+    ['Account: 123456, 'apm_id: APM37676', 'application_name: first-slvr', 'Month: July ', 'Cost_Usage_by_Service: ', ' Total cost: $0.00', 'Account: 12345678, 'apm_id: APM37676', 'application_name: first-Gold', 'Month: July ', 'Cost_Usage_by_Service: ', '   . AWS Glue - Cost: $1.00', '  . AWS Key Management Service - Cost: $2.00', '  . AWS Lambda - Cost: $0.00', '  . AWS Secrets Manager - Cost: $0.00', '  . Amazon Athena - Cost: $0.01', '  . EC2 - Other - Cost: $136.45', '  . Amazon Elastic Compute Cloud - Compute - Cost: $5904.18', '  . Amazon OpenSearch Service - Cost: $22478.67', '  . Amazon Simple Storage Service - Cost: $133.06', '  . AmazonCloudWatch - Cost: $15.48', 'Total cost: $2156.92'],
+    ['Account: 32456876564', 'apm_id: APM37676', 'application_name: first-Plat', 'Month: July ', 'Cost_Usage_by_Service: ', ' Total cost: $0.00', 'Account:134765765272', 'apm_id:APM37676', 'application_name: first-DR', 'Month: July ', 'Cost_Usage_by_Service: ', ' Total cost: $0.00', 'Account:4756q8764874', 'apm_id: APM3767542', 'application_name: Carespre-Slvr', 'Month: July ', 'Cost_Usage_by_Service: ', '   . AWS Key Management Service - Cost: $8.15', '  . AWS Lambda - Cost: $0.03', '  . Amazon Elastic Load Balancing - Cost: $33.48', '  . Amazon Simple Notification Service - Cost: $0.00', '  . Amazon Simple Storage Service - Cost: $0.05', 'Total cost: $41.71']
 ]
 
-# Separate blocks starting from TimePeriod
-blocks = []
-block = []
-for response in responses:
-    if response.startswith("TimePeriod"):
-        if block:
-            blocks.append(block)
-        block = [response]
-    else:
-        block.append(response)
-blocks.append(block)
+def format_to_human_readable(data_list):
+    formatted_data = '\n'.join(data_list)
+    return formatted_data
 
-# Calculate the maximum length of each line in all blocks
-max_length = max(len(line) for block in blocks for line in block)
+def format_to_outlook_supported(data_list):
+    formatted_data = "\n".join(data_list)
+    formatted_data = formatted_data.replace(". ", "\n  . ")
+    return formatted_data
 
-# Print the blocks side by side
-for i in range(0, len(blocks[0])):
-    for block in blocks:
-        line = block[i] if i < len(block) else ''
-        print(line.ljust(max_length), end='   ')
-    print()
+def send_email_to_outlook(formatted_data):
+    sns = boto3.client('sns', region_name='your_region')  # Replace 'your_region' with your AWS region
+    sns_topic_arn = 'your_sns_topic_arn'  # Replace 'your_sns_topic_arn' with your SNS topic ARN
 
+    subject = "Formatted Data for Outlook"
+    message = formatted_data
 
+    sns.publish(
+        TopicArn=sns_topic_arn,
+        Subject=subject,
+        Message=message
+    )
 
-
-
-Month: July
-application_name: egg-puff
-Account: 123
-apm_id: apmid
-Cost_usage_by_service: 
-Total cost: $0.00 
-Month: July
-application_name: egg-puffs
-Account: 1234
-apm_id: apmid-1
-Cost_usage_by_service: 
-- AWS Glue - Cost: $1
-- AWS Key Management Service - Cost: $1
-- AWS Lambda - Cost: $1
-- AWS Secrets Manager - Cost: $1
-- Amazon Athena - Cost: $1
-- EC2 - Other - Cost: $1
-- Amazon Elastic Compute Cloud - Compute - Cost: $5
-- Amazon OpenSearch Service - Cost: $2
-- Amazon Simple Storage Service - Cost: $1
-- AmazonCloudWatch - Cost: $1
-Total cost: $15
-Month: July
-application_name: egg-puff-1
-Account: 143
-apm_id: apmid-2
-Cost_usage_by_service: 
-Total cost: $0.00 
-Month: July
-application_name: egg-puff-3
-Account: 123456
-apm_id: apmid4
-Cost_usage_by_service: 
-Total cost: $0.00 
-Month: July
-application_name: free
-Account: 1234567
-apm_id: apmid9
-Cost_usage_by_service: 
-- AWS Key Management Service - Cost: $8
-- AWS Lambda - Cost: $3
-- Amazon Elastic Load Balancing - Cost: $3
-- Amazon Simple Notification Service - Cost: $1
-- Amazon Simple Storage Service - Cost: $5
-Total cost: $20
-
-
-
-
-responses = [
-'Month: July',
-'application_name: egg-puff',
-'Account: 123',
-'apm_id: apmid',
-'Cost_usage_by_service: ', 
-'Total cost: $0.00', 
-'Month: July',
-'application_name: egg-puffs',
-'Account: 1234',
-'apm_id: apmid-1',
-'Cost_usage_by_service: ', 
-'- AWS Glue - Cost: $1',
-'- AWS Key Management Service - Cost: $1',
-'- AWS Lambda - Cost: $1',
-'- AWS Secrets Manager - Cost: $1',
-'- Amazon Athena - Cost: $1',
-'- EC2 - Other - Cost: $1',
-'- Amazon Elastic Compute Cloud - Compute - Cost: $5',
-'- Amazon OpenSearch Service - Cost: $2',
-'- Amazon Simple Storage Service - Cost: $1',
-'- AmazonCloudWatch - Cost: $1',
-'Total cost: $15',
-'Month: July',
-'application_name: egg-puff-1',
-'Account: 143',
-'apm_id: apmid-2',
-'Cost_usage_by_service: ', 
-'Total cost: $0.00',
-'Month: July',
-'application_name: egg-puff-3',
-'Account: 123456',
-'apm_id: apmid4',
-'Cost_usage_by_service:', 
-'Total cost: $0.00', 
-'Month: July',
-'application_name: free',
-'Account: 1234567',
-'apm_id: apmid9',
-'Cost_usage_by_service: ',
-'- AWS Key Management Service - Cost: $8',
-'- AWS Lambda - Cost: $3',
-'- Amazon Elastic Load Balancing - Cost: $3',
-'- Amazon Simple Notification Service - Cost: $1',
-'- Amazon Simple Storage Service - Cost: $5',
-'Total cost: $20'
-]
-
-# Separate blocks starting from TimePeriod
-blocks = []
-block = []
-for response in responses:
-    if response.startswith("TimePeriod"):
-        if block:
-            blocks.append(block)
-        block = [response]
-    else:
-        block.append(response)
-blocks.append(block)
-
-print(f"block is {block} and blocks are {blocks}")
-
-# Calculate the maximum length of each line in all blocks
-# max_length = max(len(line) for block in blocks for line in block)
-
-# # Print the blocks side by side
-# for i in range(0, len(blocks[0])):
-#     for block in blocks:
-#         line = block[i] if i < len(block) else ''
-#         print(line.ljust(max_length), end='   ')
-#     print()
+if __name__ == "__main__":
+    for data in input_data:
+        human_readable = format_to_human_readable(data)
+        outlook_supported = format_to_outlook_supported(data)
+        
+        send_email_to_outlook(outlook_supported)
