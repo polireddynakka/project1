@@ -145,6 +145,38 @@ def format_block_html(block):
 
 <html><body><table><tr><td>APM1006706</td><td>993514063544</td><td>Carespre-Slvr</td><td>July </td><td></td><td>$8.15</td><td>$0.03</td><td>$33.48</td><td>$0.00</td><td>$0.05</td><td>$41.71</td></tr></table><br><br><table><tr><td>APM1006706</td><td>339644262595</td><td>Carespre-Gold</td><td>July </td><td></td><td>$8.15</td><td>$2.61</td><td>$50.24</td><td>$0.18</td><td>$61.18</td></tr></table><br><br><table><tr><td>APM1006706</td><td>988647855354</td><td>Carespre-Plat</td><td>July </td><td></td><td>$8.18</td><td>$123.36</td><td>$67.92</td><td>$0.53</td><td>$199.99</td></tr></table><br><br><table><tr><td>APM1006706</td><td>988647855354</td><td>Carespre-DR</td><td>July </td><td></td><td>$9.18</td><td>$0.11</td><td>$33.48</td><td>$0.13</td><td>$42.90</td></tr></table><br><br></body></html>
 
+import boto3
+from botocore.exceptions import NoCredentialsError
+
+# Your input data
+input_data = [...]
+
+def format_block_text(block):
+    # Your formatting logic here
+    formatted_block = ...
+    return formatted_block
+
+def send_email_to_sns(subject, message):
+    sns = boto3.client('sns', region_name='your_region')  # Replace 'your_region' with your AWS region
+    sns_topic_arn = 'your_sns_topic_arn'  # Replace with your SNS topic ARN
+
+    try:
+        sns.publish(
+            TopicArn=sns_topic_arn,
+            Subject=subject,
+            Message=message,
+        )
+        print("Message sent successfully.")
+    except NoCredentialsError:
+        print("Credentials not available")
+
+if __name__ == "__main__":
+    formatted_blocks = [format_block_text(block) for block in input_data]
+    formatted_data = '\n\n'.join(formatted_blocks)
+    subject = "Formatted Data"
+    
+    try:
+        send_email_to_sns(subject, formatted_data)
 
 
 
