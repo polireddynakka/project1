@@ -3,12 +3,22 @@ def format_to_human_readable(data_list):
     return formatted_data
 
 def format_to_outlook_supported(data_list):
-    formatted_data = "\n".join(data_list)
-    formatted_data = formatted_data.replace(". ", "\n  . ")
+    formatted_data = ""
+    current_block = []
+    
+    for line in data_list:
+        if line.startswith('apm_id:'):
+            if current_block:
+                formatted_block = "\n".join(current_block)
+                formatted_data += formatted_block + "\n\n"
+                current_block = []
+        current_block.append(line)
+    
+    if current_block:
+        formatted_block = "\n".join(current_block)
+        formatted_data += formatted_block + "\n\n"
+
     return formatted_data
-
-
-
 
 def send_email_to_outlook(subject, message):
     sns = boto3.client('sns', region_name='your_region')  # Replace 'your_region' with your AWS region
@@ -65,21 +75,28 @@ if __name__ == "__main__":
 
 def format_to_outlook_supported(data_list):
     formatted_data = ""
-    current_block = []
+    apm_blocks = {}
+    current_apm_id = None
     
     for line in data_list:
         if line.startswith('apm_id:'):
-            if current_block:
-                formatted_block = "\n".join(current_block)
+            if current_apm_id:
+                formatted_block = "\n".join(apm_blocks[current_apm_id])
                 formatted_data += formatted_block + "\n\n"
-                current_block = []
-        current_block.append(line)
+                apm_blocks[current_apm_id] = []
+            current_apm_id = line.split(': ')[1]
+            apm_blocks[current_apm_id] = []
+        apm_blocks[current_apm_id].append(line)
     
-    if current_block:
-        formatted_block = "\n".join(current_block)
+    if current_apm_id:
+        formatted_block = "\n".join(apm_blocks[current_apm_id])
         formatted_data += formatted_block + "\n\n"
 
     return formatted_data
+
+
+
+
 
 
 
