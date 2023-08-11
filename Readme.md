@@ -81,7 +81,7 @@ def format_to_outlook_supported(data_list):
     for line in data_list:
         if line.startswith('apm_id:'):
             if current_apm_id:
-                formatted_block = "\n".join(apm_blocks[current_apm_id])
+                formatted_block = format_block(apm_blocks[current_apm_id])
                 formatted_data += formatted_block + "\n\n"
                 apm_blocks[current_apm_id] = []
             current_apm_id = line.split(': ')[1]
@@ -89,10 +89,18 @@ def format_to_outlook_supported(data_list):
         apm_blocks[current_apm_id].append(line)
     
     if current_apm_id:
-        formatted_block = "\n".join(apm_blocks[current_apm_id])
+        formatted_block = format_block(apm_blocks[current_apm_id])
         formatted_data += formatted_block + "\n\n"
 
     return formatted_data
+
+def format_block(block):
+    formatted_block = ""
+    for line in block:
+        if not line.startswith('Account:') and not line.startswith('apm_id:'):
+            formatted_block += line + " "
+    return formatted_block
+
 
 
 
