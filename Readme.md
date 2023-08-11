@@ -114,4 +114,33 @@ def format_block(block):
 
 
 
+#HTMl Format
+def format_to_html(data_list):
+    html = "<html><body>"
+    apm_blocks = {}
+    current_apm_id = None
+    
+    for line in data_list:
+        if line.startswith('apm_id:'):
+            if current_apm_id:
+                html += format_block_html(apm_blocks[current_apm_id]) + "<br><br>"
+            current_apm_id = line.split(': ')[1]
+            apm_blocks[current_apm_id] = []
+        apm_blocks[current_apm_id].append(line)
+    
+    if current_apm_id:
+        html += format_block_html(apm_blocks[current_apm_id]) + "<br><br>"
+    
+    html += "</body></html>"
+    return html
+
+def format_block_html(block):
+    html = "<table><tr>"
+    for line in block:
+        parts = line.split(': ')
+        html += f"<td>{parts[1]}</td>"
+    html += "</tr></table>"
+    return html
+
+
 
