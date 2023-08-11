@@ -143,4 +143,8 @@ def format_block_html(block):
     return html
 
 
+<html><body><table><tr><td>APM1006706</td><td>993514063544</td><td>Carespre-Slvr</td><td>July </td><td></td><td>$8.15</td><td>$0.03</td><td>$33.48</td><td>$0.00</td><td>$0.05</td><td>$41.71</td></tr></table><br><br><table><tr><td>APM1006706</td><td>339644262595</td><td>Carespre-Gold</td><td>July </td><td></td><td>$8.15</td><td>$2.61</td><td>$50.24</td><td>$0.18</td><td>$61.18</td></tr></table><br><br><table><tr><td>APM1006706</td><td>988647855354</td><td>Carespre-Plat</td><td>July </td><td></td><td>$8.18</td><td>$123.36</td><td>$67.92</td><td>$0.53</td><td>$199.99</td></tr></table><br><br><table><tr><td>APM1006706</td><td>988647855354</td><td>Carespre-DR</td><td>July </td><td></td><td>$9.18</td><td>$0.11</td><td>$33.48</td><td>$0.13</td><td>$42.90</td></tr></table><br><br></body></html>
+
+
+
 
