@@ -1,4 +1,4 @@
-def format_to_human_readable(data_list):
+sdef format_to_human_readable(data_list):
     formatted_data = '\n'.join(data_list)
     return formatted_data
 
@@ -95,50 +95,16 @@ def format_to_outlook_supported(data_list):
     return formatted_data
 
 def format_block(block):
-    formatted_block = ""
-    max_line_length = max(len(line) for line in block)
-    
-    for line in block:
-        formatted_line = line.ljust(max_line_length)
-        formatted_block += formatted_line + "    "
-    
-    return formatted_block
-
-###
-
-def format_to_outlook_supported(data_list):
-def format_to_outlook_supported(data_list):
-    formatted_data = ""
-    apm_blocks = {}
-    current_apm_id = None
-    
-    for line in data_list:
-        if line.startswith('apm_id:'):
-            if current_apm_id:
-                formatted_block = format_block(apm_blocks[current_apm_id])
-                formatted_data += formatted_block + "\n\n"
-                apm_blocks[current_apm_id] = []
-            current_apm_id = line.split(': ')[1]
-            apm_blocks[current_apm_id] = []
-        apm_blocks[current_apm_id].append(line)
-    
-    if current_apm_id:
-        formatted_block = format_block(apm_blocks[current_apm_id])
-        formatted_data += formatted_block + "\n\n"
-
-    return formatted_data
-
-def format_block(block):
     max_line_length = max(len(line) for line in block)
     formatted_block = ""
     
-    num_blocks = len(block)
     num_lines = max(len(line.split('  ')) for line in block)
     
     for i in range(num_lines):
-        for j in range(num_blocks):
-            if len(block[j].split('  ')) > i:
-                formatted_line = block[j].split('  ')[i].ljust(max_line_length)
+        for line in block:
+            line_parts = line.split('  ')
+            if len(line_parts) > i:
+                formatted_line = line_parts[i].ljust(max_line_length)
             else:
                 formatted_line = "".ljust(max_line_length)
             formatted_block += formatted_line + "     "
