@@ -96,20 +96,18 @@ def format_to_outlook_supported(data_list):
 
 def format_block(block):
     formatted_block = ""
+    max_line_length = max(len(line) for line in block)
+    
     for line in block:
-        if not line.startswith('Account:') and not line.startswith('apm_id:'):
-            formatted_block += line + " "
+        formatted_line = line.ljust(max_line_length)
+        formatted_block += formatted_line + "    "
+    
     return formatted_block
 
 
 
-application_name: Carespre-Slvr Month: July  Cost_Usage_by_Service:     . AWS Key Management Service - Cost: $8.15   . AWS Lambda - Cost: $0.03   . Amazon Elastic Load Balancing - Cost: $33.48   . Amazon Simple Notification Service - Cost: $0.00   . Amazon Simple Storage Service - Cost: $0.05 Total cost: $41.71 
 
-application_name: Carespre-Gold Month: July  Cost_Usage_by_Service:     . AWS Key Management Service - Cost: $8.15   . AWS Lambda - Cost: $2.61   . Amazon Elastic Load Balancing - Cost: $50.24   . Amazon Simple Storage Service - Cost: $0.18 Total cost: $61.18 
 
-application_name: Carespre-Plat Month: July  Cost_Usage_by_Service:     . AWS Key Management Service - Cost: $8.18   . AWS Lambda - Cost: $123.36   . Amazon Elastic Load Balancing - Cost: $67.92   . Amazon Simple Storage Service - Cost: $0.53 Total cost: $199.99 
-
-application_name: Carespre-DR Month: July  Cost_Usage_by_Service:     . AWS Key Management Service - Cost: $9.18   . AWS Lambda - Cost: $0.11   . Amazon Elastic Load Balancing - Cost: $33.48   . Amazon Simple Storage Service - Cost: $0.13 Total cost: $42.90 
 
 
 
