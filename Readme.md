@@ -103,6 +103,16 @@ def format_block(block):
 
 
 
+application_name: Carespre-Slvr Month: July  Cost_Usage_by_Service:     . AWS Key Management Service - Cost: $8.15   . AWS Lambda - Cost: $0.03   . Amazon Elastic Load Balancing - Cost: $33.48   . Amazon Simple Notification Service - Cost: $0.00   . Amazon Simple Storage Service - Cost: $0.05 Total cost: $41.71 
+
+application_name: Carespre-Gold Month: July  Cost_Usage_by_Service:     . AWS Key Management Service - Cost: $8.15   . AWS Lambda - Cost: $2.61   . Amazon Elastic Load Balancing - Cost: $50.24   . Amazon Simple Storage Service - Cost: $0.18 Total cost: $61.18 
+
+application_name: Carespre-Plat Month: July  Cost_Usage_by_Service:     . AWS Key Management Service - Cost: $8.18   . AWS Lambda - Cost: $123.36   . Amazon Elastic Load Balancing - Cost: $67.92   . Amazon Simple Storage Service - Cost: $0.53 Total cost: $199.99 
+
+application_name: Carespre-DR Month: July  Cost_Usage_by_Service:     . AWS Key Management Service - Cost: $9.18   . AWS Lambda - Cost: $0.11   . Amazon Elastic Load Balancing - Cost: $33.48   . Amazon Simple Storage Service - Cost: $0.13 Total cost: $42.90 
+
+
+
 
 
 
