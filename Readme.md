@@ -107,6 +107,7 @@ def format_block(block):
 ###
 
 def format_to_outlook_supported(data_list):
+def format_to_outlook_supported(data_list):
     formatted_data = ""
     apm_blocks = {}
     current_apm_id = None
@@ -131,11 +132,20 @@ def format_block(block):
     max_line_length = max(len(line) for line in block)
     formatted_block = ""
     
-    for line in block:
-        formatted_line = line.ljust(max_line_length)
-        formatted_block += formatted_line + "\n"
+    num_blocks = len(block)
+    num_lines = max(len(line.split('  ')) for line in block)
+    
+    for i in range(num_lines):
+        for j in range(num_blocks):
+            if len(block[j].split('  ')) > i:
+                formatted_line = block[j].split('  ')[i].ljust(max_line_length)
+            else:
+                formatted_line = "".ljust(max_line_length)
+            formatted_block += formatted_line + "     "
+        formatted_block += "\n"
     
     return formatted_block
+
 
 
 
