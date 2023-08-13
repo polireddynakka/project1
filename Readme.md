@@ -23,3 +23,76 @@ input_data = """
 
 formatted_output = format_blocks(input_data)
 print(formatted_output)
+
+
+
+
+
+
+import requests
+from requests.auth import HTTPBasicAuth
+
+def update_confluence_page(page_id, title, content):
+    # Set your Confluence configuration
+    confluence_url = "<CONFLUENCE_URL>"
+    username = "<USERNAME>"
+    password = "<PASSWORD>"
+    
+    # Define the API endpoint URL for updating the page
+    url = f"{confluence_url}/rest/api/content/{page_id}"
+    
+    # Create the JSON payload for updating the page
+    payload = {
+        "version": {
+            "number": 2,
+        },
+        "type": "page",
+        "title": title,
+        "body": {
+            "storage": {
+                "value": content,
+                "representation": "storage"
+            }
+        }
+    }
+    
+    # Set headers for authentication and content type
+    headers = {
+        "Content-Type": "application/json"
+    }
+    
+    # Make the PUT request to update the page
+    response = requests.put(url, json=payload, auth=HTTPBasicAuth(username, password), headers=headers)
+    
+    return response
+
+def create_table(data):
+    table_markup = "| Service | Cost |\n| --- | --- |\n"
+    for service, cost in data.items():
+        table_markup += f"| {service} | {cost} |\n"
+    return table_markup
+
+def lambda_handler(event, context):
+    # Content to be updated on the page
+    title = "Updated Page Title"  # Change this to your desired title
+    data = {
+        "AWS Key Management Service": "$8.15",
+        "AWS Lambda": "$0.03",
+        "Amazon Elastic Load Balancing": "$33.48",
+        "Amazon Simple Notification Service": "$0.00",
+        "Amazon Simple Storage Service": "$0.05",
+        "Total cost": "$41.71"
+    }
+
+    # Create tabular content
+    table_content = create_table(data)
+
+    # Update the Confluence page
+    response = update_confluence_page("<PAGE_ID>", title, table_content)
+
+    # Return response
+    return {
+        "statusCode": response.status_code,
+        "body": response.text
+    }
+
