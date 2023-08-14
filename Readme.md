@@ -96,3 +96,94 @@ def lambda_handler(event, context):
         "body": response.text
     }
 
+
+
+
+
+
+
+import requests
+from requests.auth import HTTPBasicAuth
+
+def update_confluence_page(page_id, title, content):
+    # Set your Confluence configuration
+    confluence_url = "<CONFLUENCE_URL>"
+    username = "<USERNAME>"
+    password = "<PASSWORD>"
+    
+    # Define the API endpoint URL for updating the page
+    url = f"{confluence_url}/rest/api/content/{page_id}"
+    
+    # Create the JSON payload for updating the page
+    payload = {
+        "version": {
+            "number": 2,
+        },
+        "type": "page",
+        "title": title,
+        "body": {
+            "storage": {
+                "value": content,
+                "representation": "storage"
+            }
+        }
+    }
+    
+    # Set headers for authentication and content type
+    headers = {
+        "Content-Type": "application/json"
+    }
+    
+    # Make the PUT request to update the page
+    response = requests.put(url, json=payload, auth=HTTPBasicAuth(username, password), headers=headers)
+    
+    return response
+
+def create_table(data):
+    table_markup = "| Service |"
+    header_row = "| --- |"
+
+    # Create the header row and content rows for each account
+    for account, services in data.items():
+        table_markup += f" {account} |"
+        header_row += " --- |"
+
+    table_markup += "\n" + header_row + "\n"
+
+    # Iterate over services to populate each account's column
+    for service, costs_per_account in services.items():
+        row = f"| {service} |"
+        for account, cost in costs_per_account.items():
+            row += f" {cost} |"
+        table_markup += row + "\n"
+
+    return table_markup
+
+def lambda_handler(event, context):
+    # Content to be updated on the page
+    title = "Updated Page Title"  # Change this to your desired title
+    data = {
+        "Account 1": {
+            "AWS Key Management Service": "$8.15",
+            "AWS Lambda": "$0.03",
+            "Amazon Elastic Load Balancing": "$33.48"
+        },
+        "Account 2": {
+            "AWS Key Management Service": "$6.20",
+            "AWS Lambda": "$0.05",
+            "Amazon Elastic Load Balancing": "$28.75"
+        },
+        # Add more accounts and services as needed
+    }
+
+    # Create tabular content
+    table_content = create_table(data)
+
+    # Update the Confluence page
+    response = update_confluence_page("<PAGE_ID>", title, table_content)
+
+    # Return response
+    return {
+        "statusCode": response.status_code,
+        "body": response.text
+    }
