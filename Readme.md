@@ -299,6 +299,92 @@ group_and_print_blocks("\n\n".join(formatted_data))
 
 
 
+import json
+import csv
+
+# JSON data you've provided
+json_data = """
+{
+    "GroupDefinitions": [
+        {
+            "Type": "DIMENSION",
+            "Key": "SERVICE"
+        }
+    ],
+    "ResultsByTime": [
+        {
+            "TimePeriod": {
+                "Start": "2023-07-01",
+                "End": "2023-08-01"
+            },
+            "Total": {},
+            "Groups": [
+                {
+                    "Keys": ["AWS Key Management Service"],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "2.038903796",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": ["Amazon Elastic Load Balancing"],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "117.18",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": ["Amazon Simple Notification Service"],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "0.001872",
+                            "Unit": "USD"
+                        }
+                    }
+                },
+                {
+                    "Keys": ["Amazon Simple Storage Service"],
+                    "Metrics": {
+                        "UnblendedCost": {
+                            "Amount": "0.4556783425",
+                            "Unit": "USD"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "Estimated": false
+}
+"""
+
+# Parse the JSON data
+data = json.loads(json_data)
+
+# Extract relevant data
+time_period = data['ResultsByTime'][0]['TimePeriod']
+groups = data['ResultsByTime'][0]['Groups']
+
+# Prepare data for CSV
+csv_data = []
+for group in groups:
+    keys = ', '.join(group['Keys'])
+    cost_amount = group['Metrics']['UnblendedCost']['Amount']
+    cost_unit = group['Metrics']['UnblendedCost']['Unit']
+    csv_data.append([time_period['Start'], time_period['End'], keys, cost_amount, cost_unit])
+
+# Save data to CSV file
+csv_filename = "cost_data.csv"
+with open(csv_filename, 'w', newline='') as csv_file:
+    csv_writer = csv.writer(csv_file)
+    csv_writer.writerow(["Start Time", "End Time", "Keys", "Cost Amount", "Cost Unit"])
+    csv_writer.writerows(csv_data)
+
+print(f"Data saved to {csv_filename}")
 
 
 
