@@ -188,6 +188,53 @@ def lambda_handler(event, context):
         "body": response.text
     }
 
+import boto3
+import openpyxl
+from datetime import datetime, timedelta
+
+def lambda_handler(event, context):
+    # Initialize AWS Cost Explorer client
+    cost_explorer = boto3.client('ce')
+
+    # Set the time range for cost and usage data
+    start = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+    end = datetime.now().strftime('%Y-%m-%d')
+
+    # Retrieve cost and usage data
+    response = cost_explorer.get_cost_and_usage(
+        TimePeriod={'Start': start, 'End': end},
+        Granularity='DAILY',
+        Metrics=['BlendedCost']
+    )
+
+    # Create an Excel workbook
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = "CostData"
+
+    # Write headers
+    headers = ['TimePeriod', 'BlendedCost']
+    for col_idx, header in enumerate(headers, start=1):
+        sheet.cell(row=1, column=col_idx, value=header)
+
+    # Write cost and usage data
+    data = response['ResultsByTime']
+    for row_idx, entry in enumerate(data, start=2):
+        sheet.cell(row=row_idx, column=1, value=entry['TimePeriod']['Start'])
+        sheet.cell(row=row_idx, column=2, value=entry['Total']['BlendedCost']['Amount'])
+
+    # Save Excel file
+    excel_file_path = '/tmp/cost_report.xlsx'
+    workbook.save(excel_file_path)
+
+    # Upload Excel file to S3
+    s3 = boto3.client('s3')
+    s3.upload_file(excel_file_path, '<YOUR_S3_BUCKET>', 'cost_report.xlsx')
+
+    return {
+        'statusCode': 200,
+        'body': 'Cost and usage data saved to Excel file'
+    }
 
 
 
