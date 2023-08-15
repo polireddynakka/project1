@@ -240,3 +240,25 @@ def lambda_handler(event, context):
 
 
 
+import requests
+
+def lambda_handler(event, context):
+    # Replace with your actual Confluence URL
+    confluence_url = "https://your-confluence-instance.com/rest/api/content"
+
+    # Make a GET request to the Confluence API
+    response = requests.get(confluence_url)
+
+    if response.status_code == 200:
+        return {
+            "statusCode": 200,
+            "body": "Successfully fetched data from Confluence API"
+        }
+    else:
+        return {
+            "statusCode": response.status_code,
+            "body": "Failed to fetch data from Confluence API"
+        }
+
+
+
