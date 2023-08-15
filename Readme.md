@@ -261,3 +261,38 @@ def lambda_handler(event, context):
         }
 
 
+
+
+
+
+
+
+from colorama import Fore, Style
+
+input_data = """
+... (your input data here) ...
+"""
+
+def format_data(data):
+    lines = data.strip().split("\n\n")
+    formatted_data = []
+
+    for line in lines:
+        formatted_line = []
+        for item in line.split("\n"):
+            key, value = item.split(": ", 1)
+            formatted_line.append(f"{Fore.CYAN}{key}:{Style.RESET_ALL} {value}")
+
+        formatted_data.append("\n".join(formatted_line))
+
+    return formatted_data
+
+def group_and_print_blocks(data):
+    blocks = data.strip().split("\n\napm_id: ")
+    for block in blocks[1:]:  # Skip the first empty block
+        apm_id, block_data = block.split("\n", 1)
+        print(f"apm_id: {apm_id}\n{block_data}\n")
+
+formatted_data = format_data(input_data)
+group_and_print_blocks("\n\n".join(formatted_data))
+
