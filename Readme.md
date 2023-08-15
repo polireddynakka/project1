@@ -192,4 +192,4 @@ def lambda_handler(event, context):
 
 
 
-An errro occured: HTTPSConnectionPool(host='confluence.elevancehealth.com', port=443): Max retries exceeded with url: /rest/api/content/1175265086 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x7f5370dbf940>: Failed to establish a new connection: [Errno -2] Name or service not known'))"
+
