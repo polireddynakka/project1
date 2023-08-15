@@ -296,3 +296,86 @@ def group_and_print_blocks(data):
 formatted_data = format_data(input_data)
 group_and_print_blocks("\n\n".join(formatted_data))
 
+
+
+
+
+
+
+
+import pandas as pd
+
+input_data = """
+apm_id: APM1006706
+Account: 993514063544
+application_name: Carespre-Slvr
+Month: July 
+Cost_Usage_by_Service: 
+   . AWS Key Management Service - Cost: $8.15
+  . AWS Lambda - Cost: $0.03
+  . Amazon Elastic Load Balancing - Cost: $33.48
+  . Amazon Simple Notification Service - Cost: $0.00
+  . Amazon Simple Storage Service - Cost: $0.05
+Total cost: $41.71
+
+apm_id: APM1006706
+Account: 339644262595
+application_name: Carespre-Gold
+Month: July 
+Cost_Usage_by_Service: 
+   . AWS Key Management Service - Cost: $8.15
+  . AWS Lambda - Cost: $2.61
+  . Amazon Elastic Load Balancing - Cost: $50.24
+  . Amazon Simple Storage Service - Cost: $0.18
+Total cost: $61.18
+
+apm_id: APM1006706
+Account: 988647855354
+application_name: Carespre-Plat
+Month: July 
+Cost_Usage_by_Service: 
+   . AWS Key Management Service - Cost: $8.18
+  . AWS Lambda - Cost: $123.36
+  . Amazon Elastic Load Balancing - Cost: $67.92
+  . Amazon Simple Storage Service - Cost: $0.53
+Total cost: $199.99
+
+apm_id: APM1006706
+Account: 988647855354
+application_name: Carespre-DR
+Month: July 
+Cost_Usage_by_Service: 
+   . AWS Key Management Service - Cost: $9.18
+  . AWS Lambda - Cost: $0.11
+  . Amazon Elastic Load Balancing - Cost: $33.48
+  . Amazon Simple Storage Service - Cost: $0.13
+Total cost: $42.90
+"""
+
+def parse_block(block):
+    lines = block.strip().split("\n")
+    data = {}
+    
+    for line in lines:
+        key, value = line.split(": ", 1)
+        data[key] = value
+    
+    return data
+
+def group_and_print_blocks(data):
+    blocks = data.strip().split("\napm_id: ")
+    
+    df_list = []
+    
+    for block in blocks[1:]:  # Skip the first empty block
+        apm_id, block_data = block.split("\n", 1)
+        block_dict = parse_block(block_data)
+        block_dict['apm_id'] = apm_id
+        df_list.append(block_dict)
+    
+    df = pd.DataFrame(df_list)
+    print(df)
+    
+group_and_print_blocks(input_data)
+
+
