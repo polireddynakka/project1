@@ -302,6 +302,7 @@ group_and_print_blocks("\n\n".join(formatted_data))
 
 
 
+{'GroupDefinitions': [{'Type': 'DIMENSION', 'Key': 'SERVICE'}], 'ResultsByTime': [{'TimePeriod': {'Start': '2023-07-01', 'End': '2023-08-01'}, 'Total': {}, 'Groups': [{'Keys': ['AWS Key Management Service'], 'Metrics': {'UnblendedCost': {'Amount': '2.038903796', 'Unit': 'USD'}}}, {'Keys': ['Amazon Elastic Load Balancing'], 'Metrics': {'UnblendedCost': {'Amount': '117.18', 'Unit': 'USD'}}}, {'Keys': ['Amazon Simple Notification Service'], 'Metrics': {'UnblendedCost': {'Amount': '0.001872', 'Unit': 'USD'}}}, {'Keys': ['Amazon Simple Storage Service'], 'Metrics': {'UnblendedCost': {'Amount': '0.4556783425', 'Unit': 'USD'}}}], 'Estimated': False}], 'DimensionValueAttributes': [], 'ResponseMetadata': {'RequestId': '6d5d974e-91fa-4efa-8800-14dded6527f9', 'HTTPStatusCode': 200, 'HTTPHeaders': {'date': 'Tue, 15 Aug 2023 19:42:51 GMT', 'content-type': 'application/x-amz-json-1.1', 'content-length': '635', 'connection': 'keep-alive', 'x-amzn-requestid': '6d5d974e-91fa-4efa-8800-14dded6527f9', 'cache-control': 'no-cache'}, 'RetryAttempts': 0}}
 
 
 
