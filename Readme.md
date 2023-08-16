@@ -424,5 +424,38 @@ ABCD2	Chow	Latest changes are not reflecting in SIT environment.	8/7/2023 5:46	I
  
 Reference links:
 
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+  }
+</style>
+</head>
+<body>
+
+<h2>Tabular Data</h2>
+<table>
+  <tr>
+    <th>Service</th>
+    <th>Slvr</th>
+    <th>Gold</th>
+  </tr>
+  <tr>
+    <td>Provider Finder</td>
+    <td>$23.23</td>
+    <td>$18.48</td>
+  </tr>
+</table>
+
+</body>
+</html>
 
 
