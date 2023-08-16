@@ -417,9 +417,12 @@ def create_table(data):
 
 
  
+ 
 Key	Assignee	Summary	Created	Status	IT Team
 ABCD1	Sham	DEV	8/14/2023 2:32	In Progress	Team1
 ABCD2	Chow	Latest changes are not reflecting in SIT environment.	8/7/2023 5:46	In Progress	Team2
  
 Reference links:
+![image](https://github.com/polireddynakka/project1/assets/22856793/769c66a3-81b5-445f-a6f4-b0b956d21e7f)
+
 
