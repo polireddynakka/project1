@@ -483,3 +483,40 @@ html_content = """
 </body>
 </html>
 
+Service              Slvr      Gold
+-----------------------------------
+Provider Finder      $23.23    $18.48
+
+
+
+
+
+
+data = {
+    "Slvr": {
+        "Provider Finder": "$23.23"
+    },
+    "Gold": {
+        "Provider Finder": "$18.48"
+    }
+}
+
+# Determine the width of each column
+service_width = max(len("Service"), max(len(service) for service in data.values()))
+cost_width = max(len("Slvr"), len("Gold"))
+
+# Generate the header row
+header_row = f"{'Service':<{service_width}} {'Slvr':<{cost_width}} {'Gold':<{cost_width}}\n"
+separator = "-" * (service_width + cost_width * 2 + 2) + "\n"
+
+# Generate the content rows
+content_rows = ""
+for service, costs in data.items():
+    content_rows += f"{service:<{service_width}} "
+    content_rows += f"{costs.get('Slvr', ''):<{cost_width}} "
+    content_rows += f"{costs.get('Gold', ''):<{cost_width}}\n"
+
+# Concatenate the header row, separator, and content rows
+plain_text_table = header_row + separator + content_rows
+
+print(plain_text_table)
