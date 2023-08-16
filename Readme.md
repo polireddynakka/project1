@@ -576,3 +576,35 @@ for block in input_data:
 
 # Print the generated Markdown table
 print(markdown_table)
+
+
+
+
+
+
+input_data = """
+# Paste your input data here
+"""
+
+output_data = []
+entry_lines = input_data.strip().split("apm_id: ")
+
+for entry in entry_lines[1:]:
+    lines = entry.strip().split("\n")
+    entry_dict = {"apm_id": lines[0].split()[0], "Account": lines[1].split()[1]}
+    
+    for line in lines[2:]:
+        if line.startswith("application_name:"):
+            entry_dict["application_name"] = line.split(": ")[1]
+        elif line.startswith("Month:"):
+            entry_dict["Month"] = line.split(": ")[1]
+        elif line.startswith("Cost_Usage_by_Service:"):
+            entry_dict["Cost_Usage_by_Service"] = []
+        elif line.startswith("Total cost:"):
+            entry_dict["Total_cost"] = line.split(": ")[1]
+        elif line.startswith(". "):
+            entry_dict["Cost_Usage_by_Service"].append(line[2:])
+    
+    output_data.append(entry_dict)
+
+print(output_data)
