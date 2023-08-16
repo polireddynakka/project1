@@ -608,3 +608,25 @@ for entry in entry_lines[1:]:
     output_data.append(entry_dict)
 
 print(output_data)
+
+
+
+
+markdown_table = "**APM Data**\n\n"
+markdown_table += "| apm_id | Account | application_name | Month | Cost_Usage_by_Service | Total cost |\n"
+markdown_table += "|--------|---------|------------------|-------|-----------------------|------------|\n"
+
+for entry in input_data:
+    apm_id = entry["apm_id"]
+    account = entry["Account"]
+    app_name = entry["application_name"]
+    month = entry["Month"]
+    cost_info = "<br>".join(entry["Cost_Usage_by_Service"])
+    total_cost = entry["Total_cost"]
+
+    markdown_table += f"| {apm_id} | {account} | {app_name} | {month} | {cost_info} | {total_cost} |\n"
+
+# Print or use the generated Markdown table
+print(markdown_table)
+
+
