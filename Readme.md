@@ -554,3 +554,30 @@ def lambda_handler(event, context):
             "body": "Failed to send message to Teams"
         }
 
+# Sample input data
+input_data = [
+    "apm_id: APM1006706\nAccount: 993514063544\napplication_name: Carespre-Slvr\nMonth: July\nCost_Usage_by_Service:\n   \n  . AWS Key Management Service - Cost: $8.15\n  . AWS Lambda - Cost: $0.03\n  . Amazon Elastic Load Balancing - Cost: $33.48\n  . Amazon Simple Notification Service - Cost: $0.00\n  . Amazon Simple Storage Service - Cost: $0.05\nTotal cost: $41.71",
+    "apm_id: APM1006706\nAccount: 339644262595\napplication_name: Carespre-Gold\nMonth: July\nCost_Usage_by_Service:\n   \n  . AWS Key Management Service - Cost: $8.15\n  . AWS Lambda - Cost: $2.61\n  . Amazon Elastic Load Balancing - Cost: $50.24\n  . Amazon Simple Storage Service - Cost: $0.18\nTotal cost: $61.18",
+    "apm_id: APM1006706\nAccount: 988647855354\napplication_name: Carespre-Plat\nMonth: July\nCost_Usage_by_Service:\n   \n  . AWS Key Management Service - Cost: $8.18\n  . AWS Lambda - Cost: $123.36\n  . Amazon Elastic Load Balancing - Cost: $67.92\n  . Amazon Simple Storage Service - Cost: $0.53\nTotal cost: $199.99",
+    "apm_id: APM1006706\nAccount: 988647855354\napplication_name: Carespre-DR\nMonth: July\nCost_Usage_by_Service:\n   \n  . AWS Key Management Service - Cost: $9.18\n  . AWS Lambda - Cost: $0.11\n  . Amazon Elastic Load Balancing - Cost: $33.48\n  . Amazon Simple Storage Service - Cost: $0.13\nTotal cost: $42.90"
+]
+
+# Process input data and generate Markdown table
+markdown_table = "**APM Data**\n\n"
+markdown_table += "| apm_id | Account | application_name | Month | Cost_Usage_by_Service | Total cost |\n"
+markdown_table += "|--------|---------|------------------|-------|-----------------------|------------|\n"
+
+for block in input_data:
+    lines = block.split("\n")
+    apm_id = lines[0].split(": ")[1].strip()
+    account = lines[1].split(": ")[1].strip()
+    app_name = lines[2].split(": ")[1].strip()
+    month = lines[3].split(": ")[1].strip()
+    cost_lines = [line.strip() for line in lines[5:] if line.strip()]
+    cost_info = "<br>".join(cost_lines)
+    total_cost = lines[-1].split(": ")[1].strip()
+
+    markdown_table += f"| {apm_id} | {account} | {app_name} | {month} | {cost_info} | {total_cost} |\n"
+
+# Print the generated Markdown table
+print(markdown_table)
