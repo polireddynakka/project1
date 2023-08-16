@@ -630,3 +630,5 @@ for entry in input_data:
 print(markdown_table)
 
 
+[{'apm_id': 'APM1003015', 'Account': '993514063544', 'application_name': 'Provider-Finder-Slvr', 'Month': 'July ', 'Cost_Usage_by_Service': []}, {'apm_id': 'APM1003015', 'Account': '339644262595', 'application_name': 'Provider-Finder-Gold', 'Month': 'July ', 'Cost_Usage_by_Service': [], 'Total_cost': '$29156.92'}, {'apm_id': 'APM1003015', 'Account': '988647855354', 'application_name': 'Provider-Finder-Plat', 'Month': 'July ', 'Cost_Usage_by_Service': []}, {'apm_id': 'APM1003015', 'Account': '988647855354', 'application_name': 'Provider-Finder-DR', 'Month': 'July ', 'Cost_Usage_by_Service': []}, {'apm_id': 'APM1006706', 'Account': '993514063544', 'application_name': 'Carespre-Slvr', 'Month': 'July ', 'Cost_Usage_by_Service': [], 'Total_cost': '$41.71'}, {'apm_id': 'APM1006706', 'Account': '339644262595', 'application_name': 'Carespre-Gold', 'Month': 'July ', 'Cost_Usage_by_Service': [], 'Total_cost': '$61.18'}, {'apm_id': 'APM1006706', 'Account': '988647855354', 'application_name': 'Carespre-Plat', 'Month': 'July ', 'Cost_Usage_by_Service': [], 'Total_cost': '$199.99'}]
+
