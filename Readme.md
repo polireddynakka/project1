@@ -414,3 +414,12 @@ def create_table(data):
 | Service | Slvr | Gold |
 | --- | --- | --- |
 | Provider Finder | $23.23 | $18.48 |
+
+
+ 
+Key	Assignee	Summary	Created	Status	IT Team
+ABCD1	Sham	DEV	8/14/2023 2:32	In Progress	Team1
+ABCD2	Chow	Latest changes are not reflecting in SIT environment.	8/7/2023 5:46	In Progress	Team2
+ 
+Reference links:
+
