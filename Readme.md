@@ -411,3 +411,6 @@ def create_table(data):
 
 
 
+| Service | Slvr | Gold |
+| --- | --- | --- |
+| Provider Finder | $23.23 | $18.48 |
