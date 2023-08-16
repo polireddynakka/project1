@@ -388,7 +388,26 @@ print(f"Data saved to {csv_filename}")
 
 
 
+def create_table(data):
+    table_markup = "| Service |"
+    header_row = "| --- |"
 
+    # Create the header row and content rows for each account
+    for account, services in data.items():
+        table_markup += f" {account} |"
+        header_row += " --- |"
+
+    table_markup += "\n" + header_row + "\n"
+
+    # Iterate over services to populate each account's column
+    services_list = list(next(iter(data.values())).keys())
+    for service in services_list:
+      row = f"| {service} |"
+      for account, account_data in data.items():
+         cost = account_data.get(service, "-")
+         row += f" {cost} |"
+      table_markup += row + "\n"
+    return table_markup
 
 
 
