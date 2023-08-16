@@ -520,3 +520,37 @@ for service, costs in data.items():
 plain_text_table = header_row + separator + content_rows
 
 print(plain_text_table)
+
+
+
+
+
+
+
+
+import json
+import requests
+
+def lambda_handler(event, context):
+    teams_webhook_url = "YOUR_TEAMS_WEBHOOK_URL"
+    message = {
+        "text": "Hello from Lambda! This is a notification for your team."
+    }
+    
+    headers = {
+        "Content-Type": "application/json"
+    }
+    
+    response = requests.post(teams_webhook_url, data=json.dumps(message), headers=headers)
+    
+    if response.status_code == 200:
+        return {
+            "statusCode": 200,
+            "body": "Message sent to Teams successfully"
+        }
+    else:
+        return {
+            "statusCode": response.status_code,
+            "body": "Failed to send message to Teams"
+        }
+
