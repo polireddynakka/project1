@@ -463,3 +463,23 @@ Reference links:
 </html>
 
 
+
+
+html_content = """
+<html>
+<head></head>
+<body>
+<h2>Tabular Data</h2>
+<table>
+  <tr>
+    <th>Header 1</th>
+    <th>Header 2</th>
+  </tr>
+  <tr>
+    <td>Data 1</td>
+    <td>Data 2</td>
+  </tr>
+</table>
+</body>
+</html>
+
