@@ -555,12 +555,7 @@ def lambda_handler(event, context):
         }
 
 # Sample input data
-input_data = [
-    "apm_id: APM1006706\nAccount: 993514063544\napplication_name: Carespre-Slvr\nMonth: July\nCost_Usage_by_Service:\n   \n  . AWS Key Management Service - Cost: $8.15\n  . AWS Lambda - Cost: $0.03\n  . Amazon Elastic Load Balancing - Cost: $33.48\n  . Amazon Simple Notification Service - Cost: $0.00\n  . Amazon Simple Storage Service - Cost: $0.05\nTotal cost: $41.71",
-    "apm_id: APM1006706\nAccount: 339644262595\napplication_name: Carespre-Gold\nMonth: July\nCost_Usage_by_Service:\n   \n  . AWS Key Management Service - Cost: $8.15\n  . AWS Lambda - Cost: $2.61\n  . Amazon Elastic Load Balancing - Cost: $50.24\n  . Amazon Simple Storage Service - Cost: $0.18\nTotal cost: $61.18",
-    "apm_id: APM1006706\nAccount: 988647855354\napplication_name: Carespre-Plat\nMonth: July\nCost_Usage_by_Service:\n   \n  . AWS Key Management Service - Cost: $8.18\n  . AWS Lambda - Cost: $123.36\n  . Amazon Elastic Load Balancing - Cost: $67.92\n  . Amazon Simple Storage Service - Cost: $0.53\nTotal cost: $199.99",
-    "apm_id: APM1006706\nAccount: 988647855354\napplication_name: Carespre-DR\nMonth: July\nCost_Usage_by_Service:\n   \n  . AWS Key Management Service - Cost: $9.18\n  . AWS Lambda - Cost: $0.11\n  . Amazon Elastic Load Balancing - Cost: $33.48\n  . Amazon Simple Storage Service - Cost: $0.13\nTotal cost: $42.90"
-]
+input_data = []
 
 # Process input data and generate Markdown table
 markdown_table = "**APM Data**\n\n"
