@@ -1,96 +1,48 @@
+from tabulate import tabulate
+from rich import print
+from microsoftteams import Teams
 
-with this data please give python script using any python frameworks to format this data and send it to teams chat with a certain tabular format for human understanding 
-
-
-import requests
-
-# Replace with your actual Microsoft Teams webhook URL
-teams_webhook_url = "YOUR_TEAMS_WEBHOOK_URL"
-
-# Sample input data (replace this with your actual data)
+# Your input data
 input_data = """
-# Input data here
+apm_id: APM1003015
+Account: 993514063544
+application_name: Provider-Finder-Slvr
+Month: July
+Cost_Usage_by_Service:
+Total cost: $0.00
+# ... (other data entries)
 """
 
-def parse_input_data(input_data):
-    data_entries = []
-    lines = input_data.strip().split('\n')
-    entry = {}
-    inside_costs = False
-    cost_usage = {}
+# Process input data
+entries = input_data.strip().split("\n\n")
+formatted_entries = []
 
+for entry in entries:
+    lines = entry.strip().split("\n")
+    entry_data = {}
     for line in lines:
-        if not line:  # Skip empty lines
-            continue
+        key, value = map(str.strip, line.split(":", 1))
+        entry_data[key] = value
+    formatted_entries.append(entry_data)
 
-        if line.startswith("#"):
-            continue  # Skip comments
+# Format data into tabular format
+table_data = []
+for entry in formatted_entries:
+    entry_table = [
+        ["[bold]" + key, value] for key, value in entry.items()
+    ]
+    table_data.append(entry_table)
+    table_data.append([])  # Empty row to separate entries
 
-        if inside_costs:
-            if line.startswith(". "):
-                parts = line[2:].split(' - Cost: ')
-                cost_usage[parts[0]] = parts[1]
-            else:
-                entry["Cost_Usage_by_Service"] = cost_usage
-                cost_usage = {}
-                inside_costs = False
+# Convert table data to tabular format
+table_str = ""
+for entry_table in table_data:
+    table_str += tabulate(entry_table, tablefmt="plain") + "\n"
 
-        if ": " in line:
-            key, value = line.split(": ", 1)
-            if key == "Cost_Usage_by_Service":
-                inside_costs = True
-            else:
-                entry[key] = value
+# Print formatted output
+print(table_str)
 
-    data_entries.append(entry)
-
-    return data_entries
-
-data = parse_input_data(input_data)
-
-# Send formatted data to Teams
-for entry in data:
-    message = (
-        f"apm_id: {entry['apm_id']}\n"
-        f"Account: {entry['Account']}\n"
-        f"application_name: {entry['application_name']}\n"
-        f"Month: {entry['Month']}\n"
-        f"Cost_Usage_by_Service:\n"
-    )
-    if 'Cost_Usage_by_Service' in entry:
-        costs = entry['Cost_Usage_by_Service']
-        for cost_key, cost_value in costs.items():
-            message += f". {cost_key} - Cost: {cost_value}\n"
-    else:
-        message += "No cost breakdown available\n"
-    
-    message += f"Total cost: {entry.get('Total cost', 'N/A')}\n"
-
-    # Send message to Teams
-    payload = {
-        "@type": "MessageCard",
-        "@context": "http://schema.org/extensions",
-        "themeColor": "0072C6",
-        "summary": "Cost Data Summary",
-        "sections": [
-            {
-                "activityTitle": "Cost Data Summary",
-                "activitySubtitle": f"Month: {entry['Month']}",
-                "markdown": True,
-                "text": f"```\n{message}\n```"
-            }
-        ]
-    }
-
-    headers = {
-        "Content-Type": "application/json"
-    }
-
-    response = requests.post(teams_webhook_url, json=payload, headers=headers)
-
-    if response.status_code == 200:
-        print("Data sent successfully to Teams.")
-    else:
-        print("Failed to send data to Teams.")
-        print(response.text)
-
+# Send the formatted output to Microsoft Teams
+teams = Teams("<YOUR_WEBHOOK_URL>")  # Replace with your Teams webhook URL
+message = {"text": "```" + table_str + "```"}
+teams.send_message(message)
