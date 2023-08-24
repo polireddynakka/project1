@@ -1,49 +1,41 @@
-# Split the input data into individual records
-input_data = """
-# The input data you provided
-"""
+from prettytable import PrettyTable
 
-# Splitting the input data into individual records based on the "apm_id" lines
-records = input_data.strip().split("apm_id:")
+# Data for your table
+data = [
+    {"Account": "993514063544", "Application Name": "Provider-Finder-Slvr", "Month": "July", "Total Cost": "$0.00"},
+    {"Account": "339644262595", "Application Name": "Provider-Finder-Gold", "Month": "July", "Total Cost": "$29156.92"},
+    # ... (other data entries)
+]
 
-# Initialize an empty list to store dictionaries for each record
-record_dicts = []
+# Create the main table
+main_table = PrettyTable()
+main_table.field_names = ["Account", "Application Name", "Month", "Total Cost"]
 
-# Process each record and extract information
-for record in records[1:]:
-    lines = record.strip().split("\n")
-    record_dict = {
-        "Cost_Usage_by_Service": {}
-    }
+for entry in data:
+    main_table.add_row([entry["Account"], entry["Application Name"], entry["Month"], entry["Total Cost"]])
 
-    service_data = False
-    for line in lines:
-        if line.startswith(" . "):  # Service cost entry
-            service_parts = line.split(" - Cost: ")
-            service_name = service_parts[0].strip(" .")
-            cost = float(service_parts[1].replace("$", ""))
-            record_dict["Cost_Usage_by_Service"][service_name] = cost
-            service_data = True
-        elif "Total cost" in line:
-            record_dict["Total cost"] = line.split(":")[1].strip()
-        else:
-            key, value = line.split(":", 1)
-            record_dict[key.strip()] = value.strip()
+# Data for your service-specific tables
+service_data = [
+    {"Account": "339644262595", "Application Name": "Provider-Finder-Gold", "Service Name": "AWS Glue", "Cost": "$471.65"},
+    # ... (other service data entries)
+]
 
-    record_dicts.append(record_dict)
+# Create the service-specific tables
+service_tables = {}
 
-# Display the data in a tabular format
-for record_dict in record_dicts:
-    print("APM_ID:", record_dict.get("apm_id", "N/A"))
-    print("Account:", record_dict.get("Account", "N/A"))
-    print("Application Name:", record_dict.get("application_name", "N/A"))
-    print("Month:", record_dict.get("Month", "N/A"))
-    print("Total Cost:", record_dict.get("Total cost", "$0.00"))
+for entry in service_data:
+    key = (entry["Account"], entry["Application Name"])
+    if key not in service_tables:
+        service_tables[key] = PrettyTable()
+        service_tables[key].field_names = ["Account", "Application Name", "Service Name", "Cost"]
+    service_tables[key].add_row([entry["Account"], entry["Application Name"], entry["Service Name"], entry["Cost"]])
 
-    print("\nCost Usage by Service:")
-    print("-" * 54)
-    cost_by_service = record_dict.get("Cost_Usage_by_Service", {})
-    for service, cost in cost_by_service.items():
-        print(f"{service} | Cost: ${cost:.2f}")
+# Print the tables
+print("Main Table:")
+print(main_table)
+print()
 
-    print("=" * 54)
+print("Service-Specific Tables:")
+for table in service_tables.values():
+    print(table)
+    print()
