@@ -1,36 +1,47 @@
-import pandas as pd
-
-# Given input data
+# Split the input data into individual records
 input_data = """
-# (your provided data here)
+# The input data you provided
 """
 
-# Split the input data into lines
-lines = input_data.strip().split('\n')
+# Splitting the input data into individual records based on the "apm_id" lines
+records = input_data.strip().split("apm_id:")
 
-# Initialize lists to store data
-data = []
-current_entry = {}
+# Initialize an empty list to store dictionaries for each record
+record_dicts = []
 
-# Process each line and extract data
-for line in lines:
-    line = line.strip()
-    if line:
-        key, value = map(str.strip, line.split(':'))
-        current_entry[key] = value
-        if key == "Total cost":
-            data.append(current_entry)
-            current_entry = {}
+# Process each record and extract information
+for record in records[1:]:
+    lines = record.strip().split("\n")
+    record_dict = {
+        "Cost_Usage_by_Service": {}
+    }
+    
+    for line in lines:
+        key_value = line.strip().split(":", 1)
+        if len(key_value) == 2:
+            key = key_value[0].strip()
+            value = key_value[1].strip()
+            
+            if key.startswith(". "):  # Service cost entry
+                service_name, cost = value.split(" - Cost: ")
+                record_dict["Cost_Usage_by_Service"][service_name] = float(cost.replace("$", ""))
+            else:
+                record_dict[key] = value
+    
+    record_dicts.append(record_dict)
 
-# Create a DataFrame from the extracted data
-df = pd.DataFrame(data)
-
-# Print the DataFrame
-print(df)
-
-
-
-In the case where the objects below the bucket to be mounted are created by s3fs, these permissions are set on the object and no error occurs.
-However, objects created with the AWS console, s3cmd or other tools are not set with these permissions.
-Therefore, when you access such an object, it becomes permission denied.
-To solve permission denied error, you can use umask/uid/gid/mp_umask and give appropriate permissions and mount the bucket.
+# Display the data in a tabular format
+for record_dict in record_dicts:
+    print("APM_ID:", record_dict.get("apm_id", "N/A"))
+    print("Account:", record_dict.get("Account", "N/A"))
+    print("Application Name:", record_dict.get("application_name", "N/A"))
+    print("Month:", record_dict.get("Month", "N/A"))
+    print("Total Cost:", record_dict.get("Total cost", "$0.00"))
+    
+    print("\nCost Usage by Service:")
+    print("-" * 54)
+    cost_by_service = record_dict.get("Cost_Usage_by_Service", {})
+    for service, cost in cost_by_service.items():
+        print(f"{service} | Cost: ${cost:.2f}")
+    
+    print("=" * 54)
