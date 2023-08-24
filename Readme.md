@@ -37,16 +37,15 @@ table = tabulate(table_data, headers=table_headers, tablefmt="pipe")
 
 # Send formatted data to Teams
 message = {
-    "text": "Cost Data Summary:",
+    "@type": "MessageCard",
+    "@context": "http://schema.org/extensions",
+    "themeColor": "0072C6",
+    "summary": "Cost Data Summary",
     "sections": [
         {
             "activityTitle": "Cost Data Summary",
-            "facts": [
-                {
-                    "name": "Month",
-                    "value": "July"
-                }
-            ],
+            "activitySubtitle": "Month: July",
+            "markdown": True,
             "text": f"```\n{table}\n```"
         }
     ]
