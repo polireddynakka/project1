@@ -45,3 +45,7 @@ for record_dict in record_dicts:
         print(f"{service} | Cost: ${cost:.2f}")
     
     print("=" * 54)
+
+
+    service_name, cost = value.split(" - Cost: ")
+ValueError: not enough values to unpack (expected 2, got 1)
