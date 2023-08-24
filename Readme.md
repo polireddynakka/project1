@@ -44,3 +44,8 @@ for record_dict in record_dicts:
         print(f"{service} | Cost: ${cost:.2f}")
     
     print("=" * 54)
+
+
+key, value = line.split(":", 1)
+            record_dict[key.strip()] = value.strip()
+
