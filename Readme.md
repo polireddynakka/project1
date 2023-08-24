@@ -24,10 +24,9 @@ for record in records[1:]:
             cost = float(service_parts[1].replace("$", ""))
             record_dict["Cost_Usage_by_Service"][service_name] = cost
             service_data = True
+        elif "Total cost" in line:
+            record_dict["Total cost"] = line.split(":")[1].strip()
         else:
-            if service_data:
-                service_data = False
-                continue
             key, value = line.split(":", 1)
             record_dict[key.strip()] = value.strip()
 
