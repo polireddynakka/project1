@@ -16,17 +16,16 @@ for record in records[1:]:
         "Cost_Usage_by_Service": {}
     }
     
+    current_service = None
     for line in lines:
-        key_value = line.strip().split(":", 1)
-        if len(key_value) == 2:
-            key = key_value[0].strip()
-            value = key_value[1].strip()
-            
-            if key.startswith(". "):  # Service cost entry
-                service_name, cost = value.split(" - Cost: ")
-                record_dict["Cost_Usage_by_Service"][service_name] = float(cost.replace("$", ""))
-            else:
-                record_dict[key] = value
+        if line.startswith(" . "):  # Service cost entry
+            service_parts = line.split(" - Cost: ")
+            service_name = service_parts[0].strip(" .")
+            cost = float(service_parts[1].split(":")[1].strip().replace("$", ""))
+            record_dict["Cost_Usage_by_Service"][service_name] = cost
+        else:
+            key, value = line.split(":", 1)
+            record_dict[key.strip()] = value.strip()
     
     record_dicts.append(record_dict)
 
@@ -45,7 +44,3 @@ for record_dict in record_dicts:
         print(f"{service} | Cost: ${cost:.2f}")
     
     print("=" * 54)
-
-
-    service_name, cost = value.split(" - Cost: ")
-ValueError: not enough values to unpack (expected 2, got 1)
