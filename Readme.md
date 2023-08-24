@@ -1,48 +1,33 @@
-from tabulate import tabulate
-from rich import print
-from microsoftteams import Teams
+import re
+import json
 
-# Your input data
-input_data = """
-apm_id: APM1003015
-Account: 993514063544
-application_name: Provider-Finder-Slvr
-Month: July
-Cost_Usage_by_Service:
-Total cost: $0.00
-# ... (other data entries)
+data = """
+# ... (your input data here)
 """
 
-# Process input data
-entries = input_data.strip().split("\n\n")
-formatted_entries = []
+entries = re.split(r"\n\s*\n", data.strip())
+result = []
 
 for entry in entries:
-    lines = entry.strip().split("\n")
-    entry_data = {}
-    for line in lines:
-        key, value = map(str.strip, line.split(":", 1))
-        entry_data[key] = value
-    formatted_entries.append(entry_data)
+    entry_lines = entry.strip().split("\n")
+    entry_dict = {}
 
-# Format data into tabular format
-table_data = []
-for entry in formatted_entries:
-    entry_table = [
-        ["[bold]" + key, value] for key, value in entry.items()
-    ]
-    table_data.append(entry_table)
-    table_data.append([])  # Empty row to separate entries
+    for line in entry_lines:
+        if line.startswith("apm_id"):
+            entry_dict["apm_id"] = line.split(":")[1].strip()
+        elif line.startswith("Account"):
+            entry_dict["Account"] = line.split(":")[1].strip()
+        elif line.startswith("application_name"):
+            entry_dict["application_name"] = line.split(":")[1].strip()
+        elif line.startswith("Month"):
+            entry_dict["Month"] = line.split(":")[1].strip()
+        elif line.startswith("Total cost"):
+            entry_dict["Total cost"] = line.split(":")[1].strip()
+        elif re.match(r"\s*\.\s", line):
+            service, cost = line.split(" - Cost: ")
+            entry_dict.setdefault("Cost_Usage_by_Service", []).append({service.strip(): cost.strip()})
 
-# Convert table data to tabular format
-table_str = ""
-for entry_table in table_data:
-    table_str += tabulate(entry_table, tablefmt="plain") + "\n"
+    result.append(entry_dict)
 
-# Print formatted output
-print(table_str)
-
-# Send the formatted output to Microsoft Teams
-teams = Teams("<YOUR_WEBHOOK_URL>")  # Replace with your Teams webhook URL
-message = {"text": "```" + table_str + "```"}
-teams.send_message(message)
+json_result = json.dumps(result, indent=2)
+print(json_result)
