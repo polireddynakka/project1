@@ -1,36 +1,29 @@
-import re
-import json
+import pandas as pd
 
-data = """
-# ... (your input data here)
+# Given input data
+input_data = """
+# (your provided data here)
 """
 
-entries = re.split(r"\n\s*\n", data.strip())
-result = {}
+# Split the input data into lines
+lines = input_data.strip().split('\n')
 
-for entry in entries:
-    entry_lines = entry.strip().split("\n")
-    entry_dict = {}
+# Initialize lists to store data
+data = []
+current_entry = {}
 
-    for line in entry_lines:
-        if line.startswith("apm_id"):
-            apm_id = line.split(":")[1].strip()
-        elif line.startswith("Account"):
-            entry_dict["Account"] = line.split(":")[1].strip()
-        elif line.startswith("application_name"):
-            entry_dict["application_name"] = line.split(":")[1].strip()
-        elif line.startswith("Month"):
-            entry_dict["Month"] = line.split(":")[1].strip()
-        elif line.startswith("Total cost"):
-            entry_dict["Total cost"] = line.split(":")[1].strip()
-        elif re.match(r"\s*\.\s", line):
-            service, cost = line.split(" - Cost: ")
-            entry_dict.setdefault("Cost_Usage_by_Service", []).append({service.strip(): cost.strip()})
+# Process each line and extract data
+for line in lines:
+    line = line.strip()
+    if line:
+        key, value = map(str.strip, line.split(':'))
+        current_entry[key] = value
+        if key == "Total cost":
+            data.append(current_entry)
+            current_entry = {}
 
-    if apm_id not in result:
-        result[apm_id] = []
+# Create a DataFrame from the extracted data
+df = pd.DataFrame(data)
 
-    result[apm_id].append(entry_dict)
-
-json_result = json.dumps(result, indent=2)
-print(json_result)
+# Print the DataFrame
+print(df)
