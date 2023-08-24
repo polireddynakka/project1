@@ -27,3 +27,10 @@ df = pd.DataFrame(data)
 
 # Print the DataFrame
 print(df)
+
+
+
+In the case where the objects below the bucket to be mounted are created by s3fs, these permissions are set on the object and no error occurs.
+However, objects created with the AWS console, s3cmd or other tools are not set with these permissions.
+Therefore, when you access such an object, it becomes permission denied.
+To solve permission denied error, you can use umask/uid/gid/mp_umask and give appropriate permissions and mount the bucket.
