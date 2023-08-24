@@ -15,18 +15,22 @@ for record in records[1:]:
     record_dict = {
         "Cost_Usage_by_Service": {}
     }
-    
-    current_service = None
+
+    service_data = False
     for line in lines:
         if line.startswith(" . "):  # Service cost entry
             service_parts = line.split(" - Cost: ")
             service_name = service_parts[0].strip(" .")
-            cost = float(service_parts[1].split(":")[1].strip().replace("$", ""))
+            cost = float(service_parts[1].replace("$", ""))
             record_dict["Cost_Usage_by_Service"][service_name] = cost
+            service_data = True
         else:
+            if service_data:
+                service_data = False
+                continue
             key, value = line.split(":", 1)
             record_dict[key.strip()] = value.strip()
-    
+
     record_dicts.append(record_dict)
 
 # Display the data in a tabular format
@@ -36,16 +40,11 @@ for record_dict in record_dicts:
     print("Application Name:", record_dict.get("application_name", "N/A"))
     print("Month:", record_dict.get("Month", "N/A"))
     print("Total Cost:", record_dict.get("Total cost", "$0.00"))
-    
+
     print("\nCost Usage by Service:")
     print("-" * 54)
     cost_by_service = record_dict.get("Cost_Usage_by_Service", {})
     for service, cost in cost_by_service.items():
         print(f"{service} | Cost: ${cost:.2f}")
-    
+
     print("=" * 54)
-
-
-key, value = line.split(":", 1)
-            record_dict[key.strip()] = value.strip()
-
