@@ -47,3 +47,8 @@ Pid": 0,
             "Error": "failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting \"/folder\" to rootfs at \"/usr/local/test/folder\": stat /proc/self/fd/13: permission denied: unknown",
             "StartedAt": "0001-01-01T00:00:00Z",
             "FinishedAt": "0001-01-01T00:00:00Z"
+
+#!/bin/bash
+
+# Enable the user_allow_other option in /etc/fuse.conf
+sed -i '/^#user_allow_other/s/^#//' /etc/fuse.conf
