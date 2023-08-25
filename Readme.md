@@ -1,8 +1,4 @@
-
 from prettytable import PrettyTable
-import requests
-import tabulate
-
 
 # Data for your table
 data = [
@@ -11,7 +7,7 @@ data = [
     # ... (other data entries)
 ]
 
-# Create the main table
+# Create the main table (same as before)
 main_table = PrettyTable()
 main_table.field_names = ["Account", "Application Name", "Month", "Total Cost"]
 
@@ -22,11 +18,10 @@ for entry in data:
 service_data = [
     {"Account": "123", "Application Name": "Gold", "Service Name": "AWS Glue", "Cost": "$471.65"},
     {"Account": "123", "Application Name": "Gold", "Service Name": "AWS Glue", "Cost": "$471.65"},
-
     # ... (other service data entries)
 ]
 
-# Create the service-specific tables
+# Create the service-specific tables with duplicate handling
 service_tables = {}
 
 for entry in service_data:
@@ -34,7 +29,10 @@ for entry in service_data:
     if key not in service_tables:
         service_tables[key] = PrettyTable()
         service_tables[key].field_names = ["Account", "Application Name", "Service Name", "Cost"]
-    service_tables[key].add_row([entry["Account"], entry["Application Name"], entry["Service Name"], entry["Cost"]])
+    # Check for duplicates before adding
+    new_row = [entry["Account"], entry["Application Name"], entry["Service Name"], entry["Cost"]]
+    if new_row not in service_tables[key].get_rows():
+        service_tables[key].add_row(new_row)
 
 # Print the tables
 print("Main Table:")
