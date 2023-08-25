@@ -52,3 +52,6 @@ Pid": 0,
 
 # Enable the user_allow_other option in /etc/fuse.conf
 sed -i '/^#user_allow_other/s/^#//' /etc/fuse.conf
+
+
+https://stackoverflow.com/questions/17544139/allowing-permission-using-s3fs-bucket-directory-for-other-users
