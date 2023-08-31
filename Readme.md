@@ -43,3 +43,21 @@ print("Service-Specific Tables:")
 for service_table in service_tables.values():
     print(service_table)
     print()
+
+
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "route53:ChangeResourceRecordSets",
+        "route53:GetChange",
+        "route53:ListResourceRecordSets",
+        "route53:ListHostedZones"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
