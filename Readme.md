@@ -76,3 +76,6 @@ assume_role_policy = jsonencode({
     ]
   })
 }
+
+
+('Cost_Usage_by_Service', ''), ('AWS Glue - Cost', '$1.83'), ('AWS Key Management Service - Cost', '$2.94'), ('AWS Secrets Manager - Cost', '$0.00'), ('Amazon Athena - Cost', '$0.01'), ('Amazon DocumentDB (with MongoDB compatibility) - Cost', '$3.73'), ('EC2 - Other - Cost', '$4.16'), ('Amazon Elastic Compute Cloud - Compute - Cost', '$5.66'), ('Amazon Elastic Load Balancing - Cost', '$6.22'), ('Amazon OpenSearch Service - Cost', '$7.56'), ('Amazon Simple Storage Service - Cost', '$8.71'), ('AmazonCloudWatch - Cost', '$9.56'), ('Total cost', '$10.38')
