@@ -127,3 +127,52 @@ for item in data:
 for group in result:
     print(group)
 
+
+
+
+
+from pymsteams import connectorcard
+
+# Create a connector card object
+myTeamsMessage = connectorcard("YOUR_WEBHOOK_URL")
+
+# Define the message text with advanced formatting
+message_text = "<b>Hello Team!</b>\n\nHere's a table with some data:\n\n"
+
+# Define table data as HTML
+table_html = """
+<table border="1">
+  <tr>
+    <th>Name</th>
+    <th>Age</th>
+    <th>City</th>
+  </tr>
+  <tr>
+    <td>John</td>
+    <td>25</td>
+    <td>New York</td>
+  </tr>
+  <tr>
+    <td>Alice</td>
+    <td>30</td>
+    <td>Los Angeles</td>
+  </tr>
+  <tr>
+    <td>Bob</td>
+    <td>22</td>
+    <td>Chicago</td>
+  </tr>
+  <tr>
+    <td>Eve</td>
+    <td>28</td>
+    <td>San Francisco</td>
+  </tr>
+</table>
+"""
+
+# Add the message text and table to the connector card
+myTeamsMessage.text(message_text + table_html)
+
+# Send the message
+myTeamsMessage.send()
+
