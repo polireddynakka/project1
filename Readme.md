@@ -176,3 +176,16 @@ myTeamsMessage.text(message_text + table_html)
 # Send the message
 myTeamsMessage.send()
 
+
+
+# Get the start and end dates for the report
+            today = datetime.date.today()
+            start_date = datetime.date(today.year, today.month - 1, 1)
+            end_date = datetime.date(today.year, today.month, 1)
+            
+            # Set the time period to May 2023
+                
+            time_period={
+                    'Start': start_date.strftime('%Y-%m-%d'),
+                    'End': end_date.strftime('%Y-%m-%d')
+            }
