@@ -189,3 +189,13 @@ myTeamsMessage.send()
                     'Start': start_date.strftime('%Y-%m-%d'),
                     'End': end_date.strftime('%Y-%m-%d')
             }
+
+
+
+response = ce_client.get_cost_and_usage(
+                TimePeriod=time_period,
+                Granularity=granularity,
+                Metrics=metrics,
+                GroupBy=group_by,
+                Filter=filter
+            )
