@@ -232,3 +232,15 @@ response = ce_client.get_cost_and_usage(
                 GroupBy=group_by,
                 Filter=filter
             )
+
+
+
+[ERROR] KeyError: 'code'
+Traceback (most recent call last):
+  File "/var/task/lambda_function.py", line 227, in lambda_handler
+    data = retrieve_cost_usage_data()
+  File "/var/task/lambda_function.py", line 132, in retrieve_cost_usage_data
+    member_account_session = assume_role(member_account_role_arn, session_name, region)
+  File "/var/task/lambda_function.py", line 27, in assume_role
+    if e.response['Error']['code'] == 'AccessDenied':
+[ERROR] KeyError: 'code' Traceback (most recent call last):   File "/var/task/lambda_function.py", line 227, in lambda_handler     data = retrieve_cost_usage_data()   File "/var/task/lambda_function.py", line 132, in retrieve_cost_usage_data     member_account_session = assume_role(member_account_role_arn, session_name, region)   File "/var/task/lambda_function.py", line 27, in assume_role     if e.response['Error']['code'] == 'AccessDenied':
