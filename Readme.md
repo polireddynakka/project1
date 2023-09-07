@@ -191,7 +191,40 @@ myTeamsMessage.send()
             }
 
 
+def assume_role(role_arn, session_name, region):
+    sts_client = boto3.client('sts', region_name=region)
+    response = sts_client.assume_role(
+        RoleArn=role_arn,
+        RoleSessionName=session_name
+    )
 
+member_account_session = assume_role(member_account_role_arn, session_name, region)
+
+
+2023-09-07T12:30:41.067-04:00
+
+Copy
+[ERROR] ClientError: An error occurred (AccessDenied) when calling the AssumeRole operation: User: arn:aws:sts::145:assumed-role/COST_EXPLORER/COST-EXPLORER is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::123:role/COST_EXPLORER
+Traceback (most recent call last):
+  File "/var/task/lambda_function.py", line 219, in lambda_handler
+    data = retrieve_cost_usage_data()
+  File "/var/task/lambda_function.py", line 124, in retrieve_cost_usage_data
+    member_account_session = assume_role(member_account_role_arn, session_name, region)
+  File "/var/task/lambda_function.py", line 13, in assume_role
+    response = sts_client.assume_role(
+  File "/var/task/botocore/client.py", line 508, in _api_call
+    return self._make_api_call(operation_name, kwargs)
+  File "/var/task/botocore/client.py", line 911, in _make_api_call
+    raise error_class(parsed_response, operation_name)
+[ERROR] ClientError: An error occurred (AccessDenied) when calling the AssumeRole operation: User: arn:aws:sts::145:assumed-role/COST_EXPLORER/COST-EXPLORER is not authorized to perform: sts:AssumeRole on resource: arn:aws:iam::123:role/COST_EXPLORER Traceback (most recent call last):   File "/var/task/lambda_function.py", line 219, in lambda_handler     data = retrieve_cost_usage_data()   File "/var/task/lambda_function.py", line 124, in retrieve_cost_usage_data     member_account_session = assume_role(member_account_role_arn, session_name, region)   File "/var/task/lambda_function.py", line 13, in assume_role     response = sts_client.assume_role(   File "/var/task/botocore/client.py", line 508, in _api_call     return self._make_api_call(operation_name, kwargs)   File "/var/task/botocore/client.py", line 911, in _make_api_call     raise error_class(parsed_response, operation_name)
+    
+    
+    return boto3.Session(
+        aws_access_key_id=response['Credentials']['AccessKeyId'],
+        aws_secret_access_key=response['Credentials']['SecretAccessKey'],
+        aws_session_token=response['Credentials']['SessionToken'],
+        region_name=region
+    )
 response = ce_client.get_cost_and_usage(
                 TimePeriod=time_period,
                 Granularity=granularity,
