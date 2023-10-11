@@ -631,5 +631,63 @@ print(markdown_table)
 
 
 
+import boto3
+import datetime
+
+# Set up the default session using a named profile
+aws_profile_name = 'YOUR_PROFILE_NAME'
+boto3.setup_default_session(profile_name=aws_profile_name)
+
+# Create an EC2 client
+ec2 = boto3.client('ec2')
+
+# Specify the snapshot description you want to search for
+snapshot_description = 'YOUR_SNAPSHOT_DESCRIPTION'
+
+# Initialize total cost
+total_cost = 0.0
+
+# Get a list of volumes
+volumes = ec2.describe_volumes()
+
+# Get the current time
+current_time = datetime.datetime.now(datetime.timezone.utc)
+
+# Iterate through the volumes
+for volume in volumes['Volumes']:
+    # Check if the volume has a snapshot with the specified description
+    snapshot_found = False
+    snapshot_id = None
+
+    for attachment in volume['Attachments']:
+        if 'SnapshotId' in attachment:
+            snapshot_id = attachment['SnapshotId']
+            snapshot_response = ec2.describe_snapshots(SnapshotIds=[snapshot_id])
+
+            for snapshot in snapshot_response['Snapshots']:
+                if 'Description' in snapshot and snapshot['Description'] == snapshot_description:
+                    snapshot_found = True
+                    break
+
+    if snapshot_found:
+        # Calculate the cost based on the snapshot age
+        snapshot = snapshot_response['Snapshots'][0]
+        start_time = snapshot['StartTime']
+        snapshot_age_hours = (current_time - start_time).total_seconds() / 3600
+        snapshot_cost = snapshot_age_hours * 0.05  # Adjust the cost per hour as needed
+
+        # Add the cost of the snapshot to the total
+        total_cost += snapshot_cost
+
+        # Print information about the snapshot and its cost
+        print(f"Snapshot ID: {snapshot_id}")
+        print(f"Snapshot Age (hours): {snapshot_age_hours}")
+        print(f"Snapshot Cost: ${snapshot_cost:.2f}\n")
+
+# Print the total cost for all snapshots with the specified description
+print(f"Total Cost for Snapshots with Description '{snapshot_description}': ${total_cost:.2f}")
+
+
+
 
 
