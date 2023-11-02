@@ -691,3 +691,9 @@ print(f"Total Cost for Snapshots with Description '{snapshot_description}': ${to
 
 
 
+
+
+arn:aws:ec2:us-east-1:509230727284:snapshot/snap-07b421d9c35564abc
+
+
+
