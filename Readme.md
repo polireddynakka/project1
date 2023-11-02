@@ -697,3 +697,26 @@ arn:aws:ec2:us-east-1:509230727284:snapshot/snap-07b421d9c35564abc
 
 
 
+import pandas as pd
+
+# Load the Excel file
+file_path = 'snapshot_data.xlsx'
+df = pd.read_excel(file_path)
+
+# Define a function to get snapshot descriptions
+def get_snapshot_description(snapshot):
+    if snapshot % 2 == 0:
+        return 'Even Snapshot'
+    else:
+        return 'Odd Snapshot'
+
+# Add a 'Snapshot Description' column to the DataFrame
+df['Snapshot Description'] = df['Snapshot'].apply(get_snapshot_description)
+
+# Save the updated DataFrame back to the Excel file
+df.to_excel(file_path, index=False)
+
+print("Excel file updated successfully.")
+
+
+
