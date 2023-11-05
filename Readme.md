@@ -720,3 +720,52 @@ print("Excel file updated successfully.")
 
 
 
+
+import pandas as pd
+import boto3
+
+# Replace these with your AWS credentials
+aws_access_key = 'YOUR_AWS_ACCESS_KEY'
+aws_secret_key = 'YOUR_AWS_SECRET_KEY'
+aws_region = 'us-east-1'  # Update with your AWS region
+
+# Create a function to get snapshot descriptions
+def get_snapshot_description(snapshot_arn):
+    session = boto3.Session(
+        aws_access_key_id=aws_access_key,
+        aws_secret_access_key=aws_secret_key,
+        region_name=aws_region
+    )
+    ec2 = session.client('ec2')
+    
+    # Extract the snapshot ID from the ARN
+    snapshot_id = snapshot_arn.split('/')[-1]
+    
+    try:
+        response = ec2.describe_snapshots(SnapshotIds=[snapshot_id])
+        if 'Snapshots' in response and len(response['Snapshots']) > 0:
+            return response['Snapshots'][0]['Description']
+        else:
+            return 'Snapshot not found'
+    except Exception as e:
+        return str(e)
+
+# Load your Excel file
+excel_file = pd.ExcelFile('your_excel_file.xlsx')
+
+# Specify the sheet name where your data is
+sheet_name = 'YourSheetName'
+
+# Read the data from the Excel sheet
+df = excel_file.parse(sheet_name)
+
+# Create a new column for Snapshot Description
+df['Snapshot Description'] = df['Snapshot ARN'].apply(get_snapshot_description)
+
+# Save the data to a new Excel file
+output_file = 'test_file_with_snapshot_description.xlsx'
+df.to_excel(output_file, index=False, engine='openpyxl')
+
+print(f"Data with Snapshot Descriptions saved to {output_file}")
+
+
