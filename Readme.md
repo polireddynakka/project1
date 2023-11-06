@@ -835,3 +835,53 @@ destination_wb.save(destination_file)
 # Close the source and destination Excel files
 wb.close()
 destination_wb.close()
+
+
+
+
+
+import openpyxl
+import csv
+
+# Define the source and destination Excel files
+source_file = 'source_file.xlsx'
+destination_file = 'destination_file.csv'
+
+# Open the source Excel file
+wb = openpyxl.load_workbook(source_file)
+
+# Get the worksheet
+ws = wb.active
+
+# Define the column numbers for the snapshot description and cost columns
+snapshot_description_column_number = 3
+cost_column_number = 4
+
+# Get the snapshot description to match with
+snapshot_description_to_match = 'snapshot_description'
+
+# Create a CSV file to store the matching rows
+with open(destination_file, 'w', newline='') as f:
+    writer = csv.writer(f)
+
+    # Write the header row
+    writer.writerow(['Snapshot Description', 'Cost'])
+
+    # Iterate over the rows in the worksheet
+    for row in ws.rows:
+
+        # Get the snapshot description for the current row
+        snapshot_description = row[snapshot_description_column_number].value
+
+        # Get the cost for the current row
+        cost = row[cost_column_number].value
+
+        # Check if the snapshot description matches the snapshot description to match
+        if snapshot_description == snapshot_description_to_match:
+
+            # Write the current row to the CSV file
+            writer.writerow([snapshot_description, cost])
+
+# Close the source and destination files
+wb.close()
+f.close()
