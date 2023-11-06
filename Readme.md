@@ -772,3 +772,66 @@ print(f"Data with Snapshot Descriptions saved to {output_file}")
 
 
 arn:aws:ec2:us-east-1:644490409399:snapshot/snap-0e30db85672093ae0
+
+
+
+
+
+
+
+import openpyxl
+
+# Define the source and destination Excel files
+source_file = 'source_file.xlsx'
+destination_file = 'destination_file.xlsx'
+
+# Open the source Excel file
+wb = openpyxl.load_workbook(source_file)
+
+# Get the worksheet
+ws = wb.active
+
+# Define the column numbers for the snapshot description and cost columns
+snapshot_description_column_number = 3
+cost_column_number = 4
+
+# Get the snapshot description to match with
+snapshot_description_to_match = 'snapshot_description'
+
+# Create a list to store the rows that match the snapshot description
+matching_rows = []
+
+# Iterate over the rows in the worksheet
+for row in ws.rows:
+
+    # Get the snapshot description for the current row
+    snapshot_description = row[snapshot_description_column_number].value
+
+    # Get the cost for the current row
+    cost = row[cost_column_number].value
+
+    # Check if the snapshot description matches the snapshot description to match
+    if snapshot_description == snapshot_description_to_match:
+
+        # Add the current row to the matching rows list
+        matching_rows.append(row)
+
+# Create a new Excel file to store the matching rows
+destination_wb = openpyxl.Workbook()
+
+# Create a worksheet in the destination Excel file
+destination_ws = destination_wb.active
+
+# Copy the header row from the source worksheet to the destination worksheet
+destination_ws.append(ws.rows[0])
+
+# Copy the matching rows from the source worksheet to the destination worksheet
+for row in matching_rows:
+    destination_ws.append(row)
+
+# Save the destination Excel file
+destination_wb.save(destination_file)
+
+# Close the source and destination Excel files
+wb.close()
+destination_wb.close()
