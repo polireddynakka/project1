@@ -885,3 +885,23 @@ with open(destination_file, 'w', newline='') as f:
 # Close the source and destination files
 wb.close()
 f.close()
+
+
+
+
+
+# Create a CSV file to store the matching rows
+with open(destination_file, 'w', newline='') as f:
+    writer = csv.writer(f)
+
+    # Write the header row
+    writer.writerow(['Snapshot Description', 'Cost'])
+
+    # Iterate over the costs list
+    for cost in costs:
+
+        # Write the current cost to the CSV file
+        writer.writerow([snapshot_description_to_match, cost])
+
+    # Write the total cost to the last row of the CSV file
+    writer.writerow(['Total Cost', total_cost]
