@@ -905,3 +905,68 @@ with open(destination_file, 'w', newline='') as f:
 
     # Write the total cost to the last row of the CSV file
     writer.writerow(['Total Cost', total_cost]
+
+
+
+
+import openpyxl
+import csv
+
+# Define the source and destination Excel files
+source_file = 'source_file.xlsx'
+destination_file = 'destination_file.csv'
+
+# Open the source Excel file
+wb = openpyxl.load_workbook(source_file)
+
+# Get the worksheet
+ws = wb.active
+
+# Define the column numbers for the snapshot description, cost, and additional columns
+snapshot_description_column_number = 3
+cost_column_number = 4
+additional_column_numbers = [5, 6]
+
+# Get the snapshot description to match with
+snapshot_description_to_match = 'snapshot_description'
+
+# Create a list to store the additional columns
+additional_columns = []
+
+# Iterate over the rows in the worksheet
+for row in ws.rows:
+
+    # Get the snapshot description for the current row
+    snapshot_description = row[snapshot_description_column_number].value
+
+    # Get the cost for the current row
+    cost = row[cost_column_number].value
+
+    # Get the additional columns for the current row
+    additional_column_values = []
+    for column_number in additional_column_numbers:
+        additional_column_values.append(row[column_number].value)
+
+    # Check if the snapshot description matches the snapshot description to match
+    if snapshot_description == snapshot_description_to_match:
+
+        # Add the additional columns to the list
+        additional_columns.append(additional_column_values)
+
+# Create a CSV file to store the matching rows
+with open(destination_file, 'w', newline='') as f:
+    writer = csv.writer(f)
+
+    # Write the header row
+    writer.writerow(['Snapshot Description', 'Cost', 'Additional Column 1', 'Additional Column 2'])
+
+    # Iterate over the costs and additional columns list
+    for cost, additional_column_values in zip(costs, additional_columns):
+
+        # Write the current cost and additional columns to the CSV file
+        row = [snapshot_description_to_match, cost] + additional_column_values
+        writer.writerow(row)
+
+# Close the source and destination files
+wb.close()
+f.close()
