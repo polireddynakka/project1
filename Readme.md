@@ -1024,3 +1024,14 @@ def lambda_handler(event, context):
             "body": "Error occurred. Email sent with error details.",
         }
 
+
+
+
+today = datetime.date.today()
+            if today.day == 16:
+                start_date = datetime.date(today.year, today.month, 1)
+                end_date = datetime.date(today.year, today.month, 15)
+            elif:
+                start_date = datetime.date(today.year, today.month - 1, 1)
+                end_date = datetime.date(today.year, today.month, 1)
+            
