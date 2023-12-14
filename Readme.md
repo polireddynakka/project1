@@ -1,3 +1,40 @@
+
+import boto3
+import traceback
+import os
+
+def send_email_sns(subject, message):
+    # Specify the SNS topic ARN
+    sns_topic_arn = "your_sns_topic_arn"
+
+    # Create an SNS client
+    sns = boto3.client("sns")
+
+    try:
+        # Publish the message to the specified SNS topic
+        response = sns.publish(
+            TopicArn=sns_topic_arn,
+            Subject=subject,
+            Message=message
+        )
+        print("Email notification sent! Message ID:", response['MessageId'])
+    except Exception as e:
+        print("Error sending email notification:", e)
+        traceback.print_exc()
+
+def lambda_handler(event, context):
+    try:
+        # Your Python Lambda code here
+
+        # Simulate an error
+        raise Exception("This is a sample error message.")
+    except Exception as e:
+        # Send an email notification with the error message
+        send_email_sns("Lambda Error", str(e))
+        return {
+            "statusCode": 500,
+            "body": "Error occurred. Email notification sent with error details.",
+        }
 def format_blocks(data):
     blocks = data.strip().split('\n\n')
     block_lines = [block.split('\n') for block in blocks]
