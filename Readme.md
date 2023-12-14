@@ -1034,4 +1034,23 @@ today = datetime.date.today()
             elif:
                 start_date = datetime.date(today.year, today.month - 1, 1)
                 end_date = datetime.date(today.year, today.month, 1)
+
+
+import datetime
+
+today = datetime.date.today()
+
+# Calculate the number of days until next Monday
+days_until_next_monday = (0 - today.weekday() + 7) % 7
+
+# Calculate the next Monday's date
+next_monday = today + datetime.timedelta(days=days_until_next_monday)
+
+# Set the time for Monday morning (adjust as needed)
+monday_morning = datetime.datetime.combine(next_monday, datetime.time(8, 0))
+
+# Print or use 'monday_morning' in your code to schedule the task
+print("Next Monday morning:", monday_morning)
+
+                
             
