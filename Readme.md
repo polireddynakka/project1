@@ -960,6 +960,7 @@ with open(destination_file, 'w', newline='') as f:
     # Write the header row
     writer.writerow(['Snapshot Description', 'Cost', 'Additional Column 1', 'Additional Column 2'])
 
+
     # Iterate over the costs and additional columns list
     for cost, additional_column_values in zip(costs, additional_columns):
 
@@ -970,3 +971,56 @@ with open(destination_file, 'w', newline='') as f:
 # Close the source and destination files
 wb.close()
 f.close()
+
+
+
+
+
+latest
+
+import boto3
+import traceback
+
+def send_email(subject, body):
+    # Specify the sender and recipient email addresses
+    sender_email = "your_verified_email@example.com"
+    recipient_email = "recipient_email@example.com"
+
+    # Specify the AWS Region
+    aws_region = "your_aws_region"
+
+    # Create a new SES resource
+    ses = boto3.client("ses", region_name=aws_region)
+
+    # Create the message body
+    message_body = {
+        "Subject": {"Data": subject},
+        "Body": {"Text": {"Data": body}},
+    }
+
+    try:
+        # Send the email
+        response = ses.send_email(
+            Source=sender_email,
+            Destination={"ToAddresses": [recipient_email]},
+            Message=message_body,
+        )
+        print("Email sent! Message ID:", response["MessageId"])
+    except Exception as e:
+        print("Error sending email:", e)
+        traceback.print_exc()
+
+def lambda_handler(event, context):
+    try:
+        # Your Python Lambda code here
+
+        # Simulate an error
+        raise Exception("This is a sample error message.")
+    except Exception as e:
+        # Send an email with the error message
+        send_email("Lambda Error", str(e))
+        return {
+            "statusCode": 500,
+            "body": "Error occurred. Email sent with error details.",
+        }
+
