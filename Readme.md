@@ -1089,5 +1089,37 @@ monday_morning = datetime.datetime.combine(next_monday, datetime.time(8, 0))
 # Print or use 'monday_morning' in your code to schedule the task
 print("Next Monday morning:", monday_morning)
 
+
+
+
+
+
+
+
+
+
+
+today = datetime.date.today()
+            start_date = None
+            end_date = None
+            if today.day == 16:
+                start_date = datetime.date(today.year, today.month, 1)
+                end_date = datetime.date(today.year, today.month, 15)
+            elif today.weekday() == 0:
+                start_date = today - datetime.timedelta(days=today.weekday() + 7)
+                end_date = start_date.strftime('%Y-%m-%d') + datetime.timedelta(days=6)
+            else:
+                start_date = datetime.date(today.year, today.month - 1, 1)
+                end_date = datetime.date(today.year, today.month, 1)
+
+
+            # Set the time period
+
+            time_period={
+                    'Start': start_date.strftime('%Y-%m-%d'),
+                    'End': end_date.strftime('%Y-%m-%d')
+            }
+
+
                 
             
