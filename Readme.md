@@ -1121,5 +1121,34 @@ today = datetime.date.today()
             }
 
 
+
+
+
+template(name="dynamicTemplate" type="list") {
+    property(name="msg" position.from="1" position.to="32")
+}
+
+if $msg contains 'your_key_value' then {
+    action(
+        type="omfile"
+        file="/usr/docker/test2.log"
+        template="dynamicTemplate"
+    )
+} else if $msg contains 'another_key_value' then {
+    action(
+        type="omfile"
+        file="/usr/docker/test3.log"
+        template="dynamicTemplate"
+    )
+} else {
+    action(
+        type="omfile"
+        file="/usr/docker/test.log"
+        template="dynamicTemplate"
+    )
+}
+
+
+
                 
             
