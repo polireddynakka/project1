@@ -1174,5 +1174,57 @@ spec:
     name: test
 
 
+
+Split Panes:
+To split the terminal vertically, use the shortcut Cmd + D.
+To split the terminal horizontally, use the shortcut Cmd + Shift + D.
+Custom Themes:
+Navigate to iTerm2 > Preferences > Profiles > Colors.
+Choose a built-in color scheme or import a custom theme file.
+You can find custom themes online or create your own using the iTerm2 color presets.
+Shell Integration:
+Follow the instructions provided in the iTerm2 documentation to enable shell integration for your shell (e.g., Bash, Zsh).
+This typically involves running a script provided by iTerm2 to update your shell configuration file (e.g., .bashrc, .zshrc).
+Hotkey Window:
+Navigate to iTerm2 > Preferences > Keys.
+Set a hotkey combination for the "Show/hide iTerm2 with a system-wide hotkey" action.
+Once configured, use the assigned hotkey to toggle the iTerm2 hotkey window.
+Advanced Search:
+Use the shortcut Cmd + F to open the search bar.
+Enter your search query and press Enter to search through the terminal output.
+Use regex patterns for more advanced search queries.
+Trigger Commands:
+Navigate to iTerm2 > Preferences > Profiles > Advanced > Triggers.
+Add a new trigger with a regular expression pattern and specify the action to execute when the pattern is matched.
+For example, you can set up a trigger to highlight specific keywords or automatically run a command when certain output is detected.
+Mouse Reporting:
+Navigate to iTerm2 > Preferences > Profiles > Terminal.
+Enable "Enable mouse reporting" to allow mouse interaction in the terminal.
+You can now use the mouse to select text, resize panes, and click hyperlinks.
+Paste History:
+Use the shortcut Cmd + Shift + H to open the paste history.
+Select a previously copied item from the list to paste it into the terminal.
+Dynamic Profiles:
+Navigate to iTerm2 > Preferences > Profiles.
+Click on "Edit Profiles" and select "Dynamic Profiles."
+Create new dynamic profiles based on criteria like hostname, user, or environment variables.
+Session Management:
+Enable session logging in iTerm2 > Preferences > Profiles > Session.
+Use the tabs and window management features to organize your terminal sessions effectively.
+Tmux Integration:
+Install Tmux if you haven't already (brew install tmux on macOS).
+Start a new Tmux session by running tmux in the terminal.
+You can now manage Tmux sessions, windows, and panes directly within iTerm2.
+Scripting Support:
+Write scripts using AppleScript, JavaScript, or Python to automate tasks or extend iTerm2's functionality.
+Refer to the iTerm2 documentation for examples and API references for scripting.
+Touch Bar Support:
+Customize the Touch Bar by navigating to iTerm2 > Preferences > Keys > Touch Bar.
+Add commands, shortcuts, and controls to the Touch Bar based on your preferences.
+These examples should help you get started with configuring and using various features in iTerm2. Experiment with different settings and configurations to tailor iTerm2 to your specific workflow and preferences.
+
+
+
+
                 
             
