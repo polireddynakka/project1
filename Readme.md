@@ -1150,5 +1150,29 @@ if $msg contains 'your_key_value' then {
 
 
 
+spec:
+  minReplicas: 30
+  maxReplicas: 75
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 300
+  metrics:
+  - type: Pods
+    pods:
+      metric:
+        name: istio_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: 10
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: test
+
+
                 
             
