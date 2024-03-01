@@ -1225,6 +1225,30 @@ These examples should help you get started with configuring and using various fe
 
 
 
+import boto3
+
+# Set your AWS credentials
+aws_access_key_id = 'your_access_key_id'
+aws_secret_access_key = 'your_secret_access_key'
+region_name = 'your_region'
+
+# Create a boto3 client for EC2
+ec2_client = boto3.client('ec2', 
+                          aws_access_key_id=aws_access_key_id, 
+                          aws_secret_access_key=aws_secret_access_key, 
+                          region_name=region_name)
+
+# Define a function to retrieve the AMIs based on certain criteria
+def get_amis():
+    response = ec2_client.describe_images(Owners=['self'])
+    ami_list = response['Images']
+    return ami_list
+
+# Call the function to get the AMIs
+amis = get_amis()
+print(amis)
+
+
 
                 
             
