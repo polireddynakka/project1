@@ -1267,10 +1267,10 @@ ami_names = [
     "ecom-antm-diamond-efs-amznlinux2-0.3.1-2024-01-04T09-28-48Z"
 ]
 
-# Function to extract month from AMI name
 def extract_month(ami_name):
     timestamp_str = ami_name.split("-")[-2]  # Extracting the timestamp part
-    timestamp = datetime.strptime(timestamp_str, "%Y-%m-%dT%H-%M-%SZ")
+    date_str = timestamp_str.split("T")[0]  # Extracting date part
+    timestamp = datetime.strptime(date_str, "%Y-%m-%d")
     return timestamp.month
 
 # Separating AMIs by month
