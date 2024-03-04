@@ -1256,6 +1256,38 @@ ecom-antm-diamond-efs-amznlinux2-0.3.1-2024-01-19T10-59-30Z
 ecom-antm-diamond-efs-amznlinux2-0.3.1-2024-01-04T09-28-48Z
 
 
+from datetime import datetime
+from collections import defaultdict
+
+# Sample list of AMI names
+ami_names = [
+    "ecom-test-diamond-efs-amznlinux2-0.3.1-2024-03-01T15-12-02Z",
+    "ecom-antm-diamond-efs-amznlinux2-0.3.1-2024-02-08T12-10-19Z",
+    "ecom-antm-diamond-efs-amznlinux2-0.3.1-2024-01-19T10-59-30Z",
+    "ecom-antm-diamond-efs-amznlinux2-0.3.1-2024-01-04T09-28-48Z"
+]
+
+# Function to extract month from AMI name
+def extract_month(ami_name):
+    timestamp_str = ami_name.split("-")[-2]  # Extracting the timestamp part
+    timestamp = datetime.strptime(timestamp_str, "%Y-%m-%dT%H-%M-%SZ")
+    return timestamp.month
+
+# Separating AMIs by month
+amis_by_month = defaultdict(list)
+for ami_name in ami_names:
+    month = extract_month(ami_name)
+    amis_by_month[month].append(ami_name)
+
+# Displaying AMIs by month
+for month, amis in sorted(amis_by_month.items()):
+    print(f"AMIs for month {month}:")
+    for ami in amis:
+        print(ami)
+    print()
+
+
+
 
                 
             
