@@ -1288,6 +1288,61 @@ for month, amis in sorted(amis_by_month.items()):
 
 
 
+import boto3
+from datetime import datetime, timedelta
+import json
+from tabulate import tabulate
+
+def get_ec2_instances_with_old_amis():
+    ec2 = boto3.client('ec2', region_name='your-region')  # Replace 'your-region' with your AWS region
+    instances = ec2.describe_instances()
+
+    amis_info = {}
+    instances_info = []
+
+    for reservation in instances['Reservations']:
+        for instance in reservation['Instances']:
+            instance_id = instance['InstanceId']
+            instance_name = ''
+            for tag in instance['Tags']:
+                if tag['Key'] == 'Name':
+                    instance_name = tag['Value']
+                    break
+
+            creation_date = instance['LaunchTime']
+            creation_date = creation_date.replace(tzinfo=None)
+            ami_id = instance['ImageId']
+
+            if ami_id not in amis_info:
+                amis_info[ami_id] = ec2.describe_images(ImageIds=[ami_id])['Images'][0]['CreationDate']
+
+            ami_creation_date = amis_info[ami_id]
+            ami_creation_date = datetime.strptime(ami_creation_date, "%Y-%m-%dT%H:%M:%S.%fZ")
+            months_difference = (datetime.now() - ami_creation_date).days / 30
+
+            if months_difference >= 2:
+                instances_info.append({'Instance ID': instance_id, 'Instance Name': instance_name, 'AMI ID': ami_id,
+                                       'Instance Creation Date': creation_date, 'AMI Creation Date': ami_creation_date})
+
+    with open('instances_with_old_amis.json', 'w') as json_file:
+        json.dump(instances_info, json_file, default=str, indent=4)
+
+    return instances_info
+
+def send_output_to_teams(instances_info):
+    table = []
+    for instance in instances_info:
+        table.append([instance['Instance ID'], instance['Instance Name'], instance['AMI ID'], 
+                      instance['Instance Creation Date'], instance['AMI Creation Date']])
+
+    teams_message = tabulate(table, headers=['Instance ID', 'Instance Name', 'AMI ID',
+                                             'Instance Creation Date', 'AMI Creation Date'], tablefmt='grid')
+    print(teams_message)  # For demonstration, replace this with your actual method to send to Teams
+
+if __name__ == "__main__":
+    instances_info = get_ec2_instances_with_old_amis()
+    send_output_to_teams(instances_info)
+
 
                 
             
