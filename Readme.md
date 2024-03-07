@@ -1372,3 +1372,30 @@ if __name__ == "__main__":
 
 
 
+
+import boto3
+
+def list_resources_with_keyword(keyword):
+    # Initialize Boto3 client for AWS Resource Groups Tagging API
+    client = boto3.client('resourcegroupstaggingapi')
+    
+    # Search for resources with tags containing the keyword
+    response = client.get_resources(TagFilters=[{'Key': 'Name', 'Values': ['*' + keyword + '*']}])
+    
+    # Extract resource details from the response
+    matching_resources = []
+    for resource in response['ResourceTagMappingList']:
+        matching_resources.append((resource['ResourceARN'], resource['Tags']))
+    
+    return matching_resources
+
+if __name__ == "__main__":
+    keyword = input("Enter keyword to search for in resource names: ")
+    matching_resources = list_resources_with_keyword(keyword)
+    print("Resources containing '{}' in their names:".format(keyword))
+    for arn, tags in matching_resources:
+        print("- ARN: {}".format(arn))
+        print("  Tags: {}".format(tags))
+
+
+
