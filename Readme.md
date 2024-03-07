@@ -1346,3 +1346,29 @@ if __name__ == "__main__":
 
                 
             
+import boto3
+
+def list_services_with_keyword(keyword):
+    # Initialize Boto3 client for AWS services
+    client = boto3.client('servicecatalog')
+    
+    # List all AWS services
+    services = client.list_provisioned_products()
+    
+    # Iterate through each service and check if its name contains the keyword
+    matching_services = []
+    for service in services['ProvisionedProducts']:
+        if keyword.lower() in service['Name'].lower():
+            matching_services.append(service['Name'])
+    
+    return matching_services
+
+if __name__ == "__main__":
+    keyword = input("Enter keyword to search for: ")
+    matching_services = list_services_with_keyword(keyword)
+    print("AWS services containing '{}' in their names:".format(keyword))
+    for service in matching_services:
+        print("- {}".format(service))
+
+
+
