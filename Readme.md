@@ -1395,7 +1395,25 @@ if __name__ == "__main__":
     print("Resources containing '{}' in their names:".format(keyword))
     for arn, tags in matching_resources:
         print("- ARN: {}".format(arn))
-        print("  Tags: {}".format(tags))
+        print("  Tags: {}".format(import boto3
+
+def list_buckets_with_prefix(prefix):
+    # Initialize the S3 client
+    s3 = boto3.client('s3')
+
+    # List all buckets
+    response = s3.list_buckets()
+
+    # Iterate through each bucket
+    for bucket in response['Buckets']:
+        bucket_name = bucket['Name']
+
+        # Check if the bucket name contains the specified prefix
+        if prefix in bucket_name:
+            print(bucket_name)
+
+# Example usage: List buckets containing "example" in their name
+list_buckets_with_prefix('example')
 
 
 
