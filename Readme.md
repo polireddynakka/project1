@@ -1443,6 +1443,8 @@ list_buckets_with_prefix('example')
 import boto3
 
 def get_instance_name(instance):
+    if instance.tags is None:
+        return 'UnnamedInstance'
     for tag in instance.tags:
         if tag['Key'] == 'Name':
             return tag['Value']
@@ -1462,6 +1464,7 @@ if __name__ == "__main__":
     instance_names = get_ec2_instance_names()
     for instance_id, instance_name in instance_names.items():
         print(f"Instance ID: {instance_id}, Instance Name: {instance_name}")
+
 
 
 
