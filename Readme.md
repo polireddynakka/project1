@@ -1466,5 +1466,19 @@ if __name__ == "__main__":
         print(f"Instance ID: {instance_id}, Instance Name: {instance_name}")
 
 
+instances = ec2.describe_instances()
+
+amis_info = {}
+instances_info = []
+
+for reservation in instances['Reservations']:
+    for instance in reservation['Instances']:
+        if instance['KeyName']:
+            instance_name = instance['KeyName']
+            print(f"instance_name is {instance_name}")
+        else:
+            print(f"instance_name is unnamed Instance")
+
+
 
 
