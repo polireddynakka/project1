@@ -1440,5 +1440,28 @@ if __name__ == "__main__":
 
 list_buckets_with_prefix('example')
 
+import boto3
+
+def get_instance_name(instance):
+    for tag in instance.tags:
+        if tag['Key'] == 'Name':
+            return tag['Value']
+    return 'UnnamedInstance'
+
+def get_ec2_instance_names():
+    ec2 = boto3.resource('ec2')
+
+    instance_names = {}
+    for instance in ec2.instances.all():
+        instance_name = get_instance_name(instance)
+        instance_names[instance.id] = instance_name
+
+    return instance_names
+
+if __name__ == "__main__":
+    instance_names = get_ec2_instance_names()
+    for instance_id, instance_name in instance_names.items():
+        print(f"Instance ID: {instance_id}, Instance Name: {instance_name}")
+
 
 
