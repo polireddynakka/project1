@@ -1482,3 +1482,153 @@ for reservation in instances['Reservations']:
 
 
 
+import boto3
+from datetime import datetime, timedelta
+import json
+from tabulate import tabulate
+import requests
+
+
+def assume_role(role_arn, session_name, region):
+    sts_client = boto3.client('sts', region_name=region)
+
+
+    response = sts_client.assume_role(
+            RoleArn=role_arn,
+            RoleSessionName=session_name
+        )
+    return boto3.Session(
+            aws_access_key_id=response['Credentials']['AccessKeyId'],
+            aws_secret_access_key=response['Credentials']['SecretAccessKey'],
+            aws_session_token=response['Credentials']['SessionToken'],
+            region_name=region
+        )
+
+def get_ec2_instances_with_old_amis():
+
+    master_account_role_arn = 'arn:aws:iam::993514063544:role/COST_EXPLORER'
+    session_name = 'OldAMIEc2sSession'
+    responses = []
+
+    tags_by_account = {
+            'Provider-Finder-Slvr': {
+                'account_id': '123',
+                'region': 'us-east-2',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["sr"]}},{"Tags": {"Key": "costcenter","Values": ["1"]}}, {"Tags": {"Key": "workspace","Values": ["-np01"]}}]
+            },
+            'Provider-Finder-Gold': {
+                'account_id': '456',
+                'region': 'us-east-1',
+                'filters': [{"Tags": {"Key": "apm-id","Values": ["str1"]}},{"Tags": {"Key": "costcenter","Values": ["2"]}}, {"Tags": {"Key": "workspace","Values": ["-np02"]}}]
+            }
+
+        }
+
+    all_responses = []
+
+    for App, account_data in tags_by_account.items():
+            region = account_data['region']
+            account_id = account_data['account_id']
+            member_account_role_arn = f'arn:aws:iam::{account_id}:role/COST_EXPLORER'  # Replace with the ARN of the IAM role in the member account
+            # Assume the IAM role in the member account
+            member_account_session = assume_role(member_account_role_arn, session_name, region)
+            apm_id = None
+            filters = account_data['filters']
+
+            for filter in filters:
+                if filter['Tags']['Key'] == 'apm-id':
+                    apm_id = filter['Tags']['Values'][0]
+                    break
+
+            if account_id != '123' :
+                ec2 = member_account_session.client('ec2')
+                # Define the filter based on the account type (master or member)
+                filter = {
+                      "And": filters
+                }
+            else:
+                # Initialize the AWS clients
+                ec2 = boto3.client('ec2')
+                # Define the filter based on the account type (master or member)
+                filter = {
+                      "And": filters
+                }
+
+            instances = ec2.describe_instances()
+
+            amis_info = {}
+            instances_info = []
+
+            for reservation in instances['Reservations']:
+                for instance in reservation['Instances']:
+                    instance_id = instance['InstanceId']
+                    
+
+
+                    creation_date = instance['LaunchTime']
+                    creation_date = creation_date.replace(tzinfo=None)
+                    ami_id = instance['ImageId']
+
+                    if ami_id not in amis_info:
+                        amis_info[ami_id] = ec2.describe_images(ImageIds=[ami_id])['Images'][0]['CreationDate']
+
+                    ami_creation_date = amis_info[ami_id]
+                    ami_creation_date = datetime.strptime(ami_creation_date, "%Y-%m-%dT%H:%M:%S.%fZ")
+                    months_difference = (datetime.now() - ami_creation_date).days / 30
+
+                    if months_difference >= 2:
+                        instances_info.append({'Instance ID': instance_id, 'AMI ID': ami_id,
+                                            'Instance Creation Date': creation_date, 'AMI Creation Date': ami_creation_date})
+
+            responses.append(instances_info)
+            joined_response = '\n'.join(responses)
+    return str(joined_response)
+
+     
+def send_output_to_teams(instances_info):
+    table = []
+    for instance in instances_info:
+        table.append([instance['Instance ID'], instance['AMI ID'], 
+                      instance['Instance Creation Date'], instance['AMI Creation Date']])
+   
+    teams_message = tabulate(table, headers=['Instance ID', 'AMI ID',
+                                             'Instance Creation Date', 'AMI Creation Date'], tablefmt='grid')
+    print(teams_message)  # For demonstration, replace this with your actual method to send to Teams
+
+    message = {
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "themeColor": "0072C6",
+                "summary": "Instances with old AMIS",
+                "sections": [
+                    {
+                        "activityTitle": "Instances with old AMIS",
+                        "markdown": True,
+                        "text": f"```\n{teams_message}\n```"
+                    }
+                ]
+            }
+
+    headers = {
+                "Content-Type": "application/json"
+            }
+    teams_webhook_url = "teams url"
+    
+    response = requests.post(teams_webhook_url, json=message, headers=headers)
+
+
+def lambda_handler(event, context):
+    instances_info = get_ec2_instances_with_old_amis()
+        
+    old_instances = [ instance for instance in instances_info if instance['AMI Creation Date'] < datetime.now() - timedelta(days=60)]
+            
+            # with open('instances_with_old_amis.json', 'w') as json_file:
+            #     json.dump(old_instances, json_file, default=str, indent=4)
+            
+    for instance in old_instances:
+                print(f"Instance ID: {instance['Instance ID']}, ,AMI ID: {instance['AMI ID']}")
+        
+        
+    send_output_to_teams(instances_info)
+
+
