@@ -1506,7 +1506,7 @@ def assume_role(role_arn, session_name, region):
 
 def get_ec2_instances_with_old_amis():
 
-    master_account_role_arn = 'arn:aws:iam::993514063544:role/COST_EXPLORER'
+    master_account_role_arn = 'arn:aws:iam::123:role/COST_EXPLORER'
     session_name = 'OldAMIEc2sSession'
     responses = []
 
