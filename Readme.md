@@ -1773,6 +1773,140 @@ def lambda_handler(event, context):
 # Uncomment the lines below if you want to run this script locally
 # event = {}
 # lambda_handler(event, {})
+import boto3
+from datetime import datetime, timedelta
+import json
+import requests
+from tabulate import tabulate
+
+
+def assume_role(role_arn, session_name, region):
+    sts_client = boto3.client('sts', region_name=region)
+
+    response = sts_client.assume_role(
+        RoleArn=role_arn,
+        RoleSessionName=session_name
+    )
+
+    return boto3.Session(
+        aws_access_key_id=response['Credentials']['AccessKeyId'],
+        aws_secret_access_key=response['Credentials']['SecretAccessKey'],
+        aws_session_token=response['Credentials']['SessionToken'],
+        region_name=region
+    )
+
+
+def get_ec2_instances_with_old_amis(tags_by_account):
+    responses = {}
+
+    for app, account_data in tags_by_account.items():
+        region = account_data['region']
+        account_id = account_data['account_id']
+        session_name = f'{app}OldAMIEc2sSession'
+        member_account_role_arn = f'arn:aws:iam::{account_id}:role/COST_EXPLORER'
+
+        # Assume the IAM role in the member account
+        member_account_session = assume_role(member_account_role_arn, session_name, region)
+
+        filters = account_data['filters']
+
+        ec2 = member_account_session.client('ec2')
+
+        instances = ec2.describe_instances(Filters=filters)
+
+        amis_info = {}
+        instances_info = []
+
+        for reservation in instances['Reservations']:
+            for instance in reservation['Instances']:
+                instance_id = instance['InstanceId']
+                creation_date = instance['LaunchTime'].replace(tzinfo=None)
+                ami_id = instance['ImageId']
+
+                if ami_id not in amis_info:
+                    amis_info[ami_id] = ec2.describe_images(ImageIds=[ami_id])['Images'][0]['CreationDate']
+
+                ami_creation_date = datetime.strptime(amis_info[ami_id], "%Y-%m-%dT%H:%M:%S.%fZ")
+                months_difference = (datetime.now() - ami_creation_date).days / 30
+
+                if months_difference >= 2:
+                    instances_info.append({
+                        'Instance ID': instance_id,
+                        'AMI ID': ami_id,
+                        'Instance Creation Date': creation_date,
+                        'AMI Creation Date': ami_creation_date
+                    })
+
+        responses[app] = instances_info
+
+    return responses
+
+
+def send_output_to_teams(instances_info, teams_webhook_url):
+    for account, instances in instances_info.items():
+        table = []
+        for instance in instances:
+            table.append([instance['Instance ID'], instance['AMI ID'],
+                          instance['Instance Creation Date'], instance['AMI Creation Date']])
+
+        teams_message = f"\n\nAccount: {account}\n"
+        teams_message += tabulate(table, headers=['Instance ID', 'AMI ID',
+                                                  'Instance Creation Date', 'AMI Creation Date'], tablefmt='grid')
+
+        print(teams_message)  # For demonstration, replace this with your actual method to send to Teams
+
+        message = {
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": "0072C6",
+            "summary": f"Instances with old AMIs - {account}",
+            "sections": [
+                {
+                    "activityTitle": f"Instances with old AMIs - {account}",
+                    "markdown": True,
+                    "text": f"```\n{teams_message}\n```"
+                }
+            ]
+        }
+
+        headers = {
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post(teams_webhook_url, json=message, headers=headers)
+
+        print(response.text)  # Print response from the Teams webhook
+
+
+def lambda_handler(event, context):
+    tags_by_account = {
+        'Provider-Finder-Slvr': {
+            'account_id': '123',
+            'region': 'us-east-2',
+            'filters': [{"Name": "tag:apm-id", "Values": ["sr"]},
+                        {"Name": "tag:costcenter", "Values": ["1"]},
+                        {"Name": "tag:workspace", "Values": ["-np01"]}]
+        },
+        'Provider-Finder-Gold': {
+            'account_id': '456',
+            'region': 'us-east-1',
+            'filters': [{"Name": "tag:apm-id", "Values": ["str1"]},
+                        {"Name": "tag:costcenter", "Values": ["2"]},
+                        {"Name": "tag:workspace", "Values": ["-np02"]}]
+        }
+    }
+
+    instances_info = get_ec2_instances_with_old_amis(tags_by_account)
+
+    teams_webhook_url = "teams url"  # Replace with your Microsoft Teams webhook URL
+    send_output_to_teams(instances_info, teams_webhook_url)
+
+
+# Uncomment the lines below if you want to run this script locally
+# event = {}
+# lambda_handler(event, {})
+
+
 
 
     
